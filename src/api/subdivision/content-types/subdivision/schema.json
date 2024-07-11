@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "subdivisions",
+  "info": {
+    "singularName": "subdivision",
+    "pluralName": "subdivisions",
+    "displayName": "Subdivision"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    }
+  }
+}

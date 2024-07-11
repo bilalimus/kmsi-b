@@ -1,0 +1,63 @@
+{
+  "kind": "collectionType",
+  "collectionName": "contragents",
+  "info": {
+    "singularName": "contragent",
+    "pluralName": "contragents",
+    "displayName": "Contragent",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "inn": {
+      "type": "string",
+      "minLength": 14,
+      "maxLength": 14
+    },
+    "ls": {
+      "type": "string"
+    },
+    "resident": {
+      "type": "string",
+      "maxLength": 3,
+      "minLength": 3
+    },
+    "tel": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "address": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "subdivisions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::subdivision.subdivision"
+    },
+    "subcompany": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::subcompany.subcompany"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "person",
+        "company"
+      ]
+    }
+  }
+}
