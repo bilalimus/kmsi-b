@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "subcompanies",
+  "info": {
+    "singularName": "subcompany",
+    "pluralName": "subcompanies",
+    "displayName": "Subcompany",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "parent": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::company.company"
+    }
+  }
+}
