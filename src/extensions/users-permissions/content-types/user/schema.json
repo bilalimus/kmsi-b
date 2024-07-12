@@ -70,8 +70,9 @@
     },
     "mycompany": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::subcompany.subcompany"
+      "relation": "manyToOne",
+      "target": "api::subcompany.subcompany",
+      "inversedBy": "users"
     }
   }
 }

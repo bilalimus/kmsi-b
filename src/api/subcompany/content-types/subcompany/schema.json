@@ -19,6 +19,18 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::company.company"
+    },
+    "contragent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::contragent.contragent",
+      "inversedBy": "subcompanies"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "mycompany"
     }
   }
 }

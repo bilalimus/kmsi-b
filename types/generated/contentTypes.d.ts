@@ -726,7 +726,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     usersurname: Attribute.String;
     mycompany: Attribute.Relation<
       'plugin::users-permissions.user',
-      'oneToMany',
+      'manyToOne',
       'api::subcompany.subcompany'
     >;
     createdAt: Attribute.DateTime;
@@ -855,7 +855,7 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'oneToMany',
       'api::subdivision.subdivision'
     >;
-    subcompany: Attribute.Relation<
+    subcompanies: Attribute.Relation<
       'api::contragent.contragent',
       'oneToMany',
       'api::subcompany.subcompany'
@@ -895,6 +895,16 @@ export interface ApiSubcompanySubcompany extends Schema.CollectionType {
       'api::subcompany.subcompany',
       'oneToMany',
       'api::company.company'
+    >;
+    contragent: Attribute.Relation<
+      'api::subcompany.subcompany',
+      'manyToOne',
+      'api::contragent.contragent'
+    >;
+    users: Attribute.Relation<
+      'api::subcompany.subcompany',
+      'oneToMany',
+      'plugin::users-permissions.user'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

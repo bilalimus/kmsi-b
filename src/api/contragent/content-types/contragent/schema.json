@@ -47,10 +47,11 @@
       "relation": "oneToMany",
       "target": "api::subdivision.subdivision"
     },
-    "subcompany": {
+    "subcompanies": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::subcompany.subcompany"
+      "target": "api::subcompany.subcompany",
+      "mappedBy": "contragent"
     },
     "type": {
       "type": "enumeration",
