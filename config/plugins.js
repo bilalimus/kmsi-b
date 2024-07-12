@@ -8,7 +8,7 @@ module.exports = ({ env }) => ({
         expiresIn: '1d',
       },
       register: {
-        allowedFields: ["usersurname"],
+        allowedFields: ["usersurname", "mycompany"],
       }
     },
   },
