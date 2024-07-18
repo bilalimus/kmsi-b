@@ -47,7 +47,7 @@
       "relation": "oneToMany",
       "target": "api::subdivision.subdivision"
     },
-    "subcompanies": {
+    "mycompany": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::subcompany.subcompany",

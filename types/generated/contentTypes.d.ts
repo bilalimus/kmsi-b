@@ -855,7 +855,7 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'oneToMany',
       'api::subdivision.subdivision'
     >;
-    subcompanies: Attribute.Relation<
+    mycompany: Attribute.Relation<
       'api::contragent.contragent',
       'oneToMany',
       'api::subcompany.subcompany'
@@ -896,15 +896,15 @@ export interface ApiSubcompanySubcompany extends Schema.CollectionType {
       'oneToMany',
       'api::company.company'
     >;
-    contragent: Attribute.Relation<
-      'api::subcompany.subcompany',
-      'manyToOne',
-      'api::contragent.contragent'
-    >;
     users: Attribute.Relation<
       'api::subcompany.subcompany',
       'oneToMany',
       'plugin::users-permissions.user'
+    >;
+    contragent: Attribute.Relation<
+      'api::subcompany.subcompany',
+      'manyToOne',
+      'api::contragent.contragent'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
