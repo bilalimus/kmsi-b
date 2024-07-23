@@ -10,8 +10,6 @@ const authHeader = `Basic ${Buffer.from(authString).toString('base64')}`;
 module.exports = {
   async beforeCreate(event) {
     const { data } = event.params;
-
-    console.log(data)
     
     const newData = {
       full_name: data.name, 
