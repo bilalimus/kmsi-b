@@ -861,6 +861,11 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'api::subcompany.subcompany'
     >;
     type: Attribute.Enumeration<['person', 'company']>;
+    order_for_admission: Attribute.Relation<
+      'api::contragent.contragent',
+      'oneToOne',
+      'api::order-for-admission.order-for-admission'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -871,6 +876,44 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::contragent.contragent',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiOrderForAdmissionOrderForAdmission
+  extends Schema.CollectionType {
+  collectionName: 'order_for_admissions';
+  info: {
+    singularName: 'order-for-admission';
+    pluralName: 'order-for-admissions';
+    displayName: 'OrderForAdmission';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    docDate: Attribute.Date & Attribute.Required;
+    docNumber: Attribute.BigInteger & Attribute.Required & Attribute.Unique;
+    amount: Attribute.Decimal & Attribute.Required;
+    contragent: Attribute.Relation<
+      'api::order-for-admission.order-for-admission',
+      'oneToOne',
+      'api::contragent.contragent'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::order-for-admission.order-for-admission',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::order-for-admission.order-for-admission',
       'oneToOne',
       'admin::user'
     > &
@@ -972,6 +1015,7 @@ declare module '@strapi/types' {
       'plugin::i18n.locale': PluginI18NLocale;
       'api::company.company': ApiCompanyCompany;
       'api::contragent.contragent': ApiContragentContragent;
+      'api::order-for-admission.order-for-admission': ApiOrderForAdmissionOrderForAdmission;
       'api::subcompany.subcompany': ApiSubcompanySubcompany;
       'api::subdivision.subdivision': ApiSubdivisionSubdivision;
     }

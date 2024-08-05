@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "order_for_admissions",
+  "info": {
+    "singularName": "order-for-admission",
+    "pluralName": "order-for-admissions",
+    "displayName": "OrderForAdmission",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "docDate": {
+      "type": "date",
+      "required": true
+    },
+    "docNumber": {
+      "type": "biginteger",
+      "unique": true,
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "contragent": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::contragent.contragent",
+      "inversedBy": "order_for_admission"
+    }
+  }
+}
