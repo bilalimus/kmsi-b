@@ -921,6 +921,43 @@ export interface ApiOrderForAdmissionOrderForAdmission
   };
 }
 
+export interface ApiPayrollPayroll extends Schema.CollectionType {
+  collectionName: 'payrolls';
+  info: {
+    singularName: 'payroll';
+    pluralName: 'payrolls';
+    displayName: 'Payroll';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    docDate: Attribute.Date & Attribute.Required;
+    periodFrom: Attribute.Date & Attribute.Required;
+    periodTo: Attribute.Date & Attribute.Required;
+    amount: Attribute.Decimal & Attribute.Required;
+    contragent: Attribute.Relation<
+      'api::payroll.payroll',
+      'oneToOne',
+      'api::contragent.contragent'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::payroll.payroll',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::payroll.payroll',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiSubcompanySubcompany extends Schema.CollectionType {
   collectionName: 'subcompanies';
   info: {
@@ -1016,6 +1053,7 @@ declare module '@strapi/types' {
       'api::company.company': ApiCompanyCompany;
       'api::contragent.contragent': ApiContragentContragent;
       'api::order-for-admission.order-for-admission': ApiOrderForAdmissionOrderForAdmission;
+      'api::payroll.payroll': ApiPayrollPayroll;
       'api::subcompany.subcompany': ApiSubcompanySubcompany;
       'api::subdivision.subdivision': ApiSubdivisionSubdivision;
     }

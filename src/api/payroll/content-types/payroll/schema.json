@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "payrolls",
+  "info": {
+    "singularName": "payroll",
+    "pluralName": "payrolls",
+    "displayName": "Payroll"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "docDate": {
+      "type": "date",
+      "required": true
+    },
+    "periodFrom": {
+      "type": "date",
+      "required": true
+    },
+    "periodTo": {
+      "type": "date",
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "contragent": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::contragent.contragent"
+    }
+  }
+}
