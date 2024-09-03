@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "subdivisions",
+  "collectionName": "subdiv_ones",
   "info": {
-    "singularName": "subdivision",
-    "pluralName": "subdivisions",
-    "displayName": "Subdivision"
+    "singularName": "subdiv-one",
+    "pluralName": "subdiv-ones",
+    "displayName": "SubdivOne"
   },
   "options": {
     "draftAndPublish": false

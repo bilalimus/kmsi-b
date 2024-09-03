@@ -42,11 +42,6 @@
     "comment": {
       "type": "string"
     },
-    "subdivisions": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::subdivision.subdivision"
-    },
     "mycompany": {
       "type": "relation",
       "relation": "oneToMany",
@@ -65,6 +60,16 @@
       "relation": "oneToOne",
       "target": "api::order-for-admission.order-for-admission",
       "mappedBy": "contragent"
+    },
+    "division": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::division.division"
+    },
+    "subdiv_one": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::subdiv-one.subdiv-one"
     }
   }
 }

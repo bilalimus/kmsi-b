@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * subdivision router
+ * subdiv-one router
  */
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::subdivision.subdivision');
+module.exports = createCoreRouter('api::subdiv-one.subdiv-one');

@@ -850,11 +850,6 @@ export interface ApiContragentContragent extends Schema.CollectionType {
     email: Attribute.Email;
     address: Attribute.String;
     comment: Attribute.String;
-    subdivisions: Attribute.Relation<
-      'api::contragent.contragent',
-      'oneToMany',
-      'api::subdivision.subdivision'
-    >;
     mycompany: Attribute.Relation<
       'api::contragent.contragent',
       'oneToMany',
@@ -866,6 +861,16 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'oneToOne',
       'api::order-for-admission.order-for-admission'
     >;
+    division: Attribute.Relation<
+      'api::contragent.contragent',
+      'oneToOne',
+      'api::division.division'
+    >;
+    subdiv_one: Attribute.Relation<
+      'api::contragent.contragent',
+      'oneToOne',
+      'api::subdiv-one.subdiv-one'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -876,6 +881,36 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::contragent.contragent',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiDivisionDivision extends Schema.CollectionType {
+  collectionName: 'divisions';
+  info: {
+    singularName: 'division';
+    pluralName: 'divisions';
+    displayName: 'Division';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::division.division',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::division.division',
       'oneToOne',
       'admin::user'
     > &
@@ -904,6 +939,14 @@ export interface ApiOrderForAdmissionOrderForAdmission
       'oneToOne',
       'api::contragent.contragent'
     >;
+    autor: Attribute.Relation<
+      'api::order-for-admission.order-for-admission',
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
+    basedOn: Attribute.String;
+    periodFrom: Attribute.Date;
+    periodTo: Attribute.Date;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -958,6 +1001,41 @@ export interface ApiPayrollPayroll extends Schema.CollectionType {
   };
 }
 
+export interface ApiPositionPosition extends Schema.CollectionType {
+  collectionName: 'positions';
+  info: {
+    singularName: 'position';
+    pluralName: 'positions';
+    displayName: 'Position';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    title: Attribute.String;
+    user: Attribute.Relation<
+      'api::position.position',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::position.position',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::position.position',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiSubcompanySubcompany extends Schema.CollectionType {
   collectionName: 'subcompanies';
   info: {
@@ -1003,12 +1081,12 @@ export interface ApiSubcompanySubcompany extends Schema.CollectionType {
   };
 }
 
-export interface ApiSubdivisionSubdivision extends Schema.CollectionType {
-  collectionName: 'subdivisions';
+export interface ApiSubdivOneSubdivOne extends Schema.CollectionType {
+  collectionName: 'subdiv_ones';
   info: {
-    singularName: 'subdivision';
-    pluralName: 'subdivisions';
-    displayName: 'Subdivision';
+    singularName: 'subdiv-one';
+    pluralName: 'subdiv-ones';
+    displayName: 'SubdivOne';
   };
   options: {
     draftAndPublish: false;
@@ -1018,13 +1096,13 @@ export interface ApiSubdivisionSubdivision extends Schema.CollectionType {
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::subdivision.subdivision',
+      'api::subdiv-one.subdiv-one',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::subdivision.subdivision',
+      'api::subdiv-one.subdiv-one',
       'oneToOne',
       'admin::user'
     > &
@@ -1052,10 +1130,12 @@ declare module '@strapi/types' {
       'plugin::i18n.locale': PluginI18NLocale;
       'api::company.company': ApiCompanyCompany;
       'api::contragent.contragent': ApiContragentContragent;
+      'api::division.division': ApiDivisionDivision;
       'api::order-for-admission.order-for-admission': ApiOrderForAdmissionOrderForAdmission;
       'api::payroll.payroll': ApiPayrollPayroll;
+      'api::position.position': ApiPositionPosition;
       'api::subcompany.subcompany': ApiSubcompanySubcompany;
-      'api::subdivision.subdivision': ApiSubdivisionSubdivision;
+      'api::subdiv-one.subdiv-one': ApiSubdivOneSubdivOne;
     }
   }
 }

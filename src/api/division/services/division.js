@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * subdivision service
+ * division service
  */
 
 const { createCoreService } = require('@strapi/strapi').factories;
 
-module.exports = createCoreService('api::subdivision.subdivision');
+module.exports = createCoreService('api::division.division');

@@ -30,6 +30,20 @@
       "relation": "oneToOne",
       "target": "api::contragent.contragent",
       "inversedBy": "order_for_admission"
+    },
+    "autor": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user"
+    },
+    "basedOn": {
+      "type": "string"
+    },
+    "periodFrom": {
+      "type": "date"
+    },
+    "periodTo": {
+      "type": "date"
     }
   }
 }
