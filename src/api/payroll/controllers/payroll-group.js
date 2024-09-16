@@ -72,12 +72,12 @@ module.exports = {
 
       // Применяем фильтр по divisionID, если он передан
       if (divisionID) {
-        filters['contragent.division.id'] = divisionID; // Обращаемся к ID напрямую
+        filters['contragent.division.id'] = { $eq: divisionID }; // Используем оператор равенства $eq
       }
 
       // Применяем фильтр по subdiv_oneID, если он передан и не равен 0
       if (subdiv_oneID && subdiv_oneID !== 0) {
-        filters['contragent.subdiv_one.id'] = subdiv_oneID; // Обращаемся к ID напрямую
+        filters['contragent.subdiv_one.id'] = { $eq: subdiv_oneID }; // Используем оператор равенства $eq
       }
 
       // Применяем фильтр по диапазону периодов только если оба значения переданы
