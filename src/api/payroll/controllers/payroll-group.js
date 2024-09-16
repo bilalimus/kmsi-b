@@ -72,19 +72,19 @@ module.exports = {
 
       // Применяем фильтр по divisionID, если он передан
       if (divisionID) {
-        filters['contragent.division.id'] = { $eq: divisionID }; // Используем оператор равенства $eq
+        filters['contragent.division.id'] = { $eq: divisionID };
       }
 
       // Применяем фильтр по subdiv_oneID, если он передан и не равен 0
       if (subdiv_oneID && subdiv_oneID !== 0) {
-        filters['contragent.subdiv_one.id'] = { $eq: subdiv_oneID }; // Используем оператор равенства $eq
+        filters['contragent.subdiv_one.id'] = { $eq: subdiv_oneID };
       }
 
       // Применяем фильтр по диапазону периодов только если оба значения переданы
       if (periodFrom && periodTo) {
         filters.$and = [
-          { periodFrom: { $gte: periodFrom } }, // Период начинается с `periodFrom` или позже
-          { periodTo: { $lte: periodTo } },     // Период заканчивается до `periodTo` или раньше
+          { periodFrom: { $gte: new Date(periodFrom) } }, // Конвертируем в объект Date
+          { periodTo: { $lte: new Date(periodTo) } },     // Конвертируем в объект Date
         ];
       }
 
