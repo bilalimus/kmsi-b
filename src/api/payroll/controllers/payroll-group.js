@@ -63,7 +63,7 @@ module.exports = {
   },
 
   // Метод для фильтрации записей Payroll
-  async filter(ctx) {
+  async read(ctx) {
     try {
       // Получаем фильтры из тела POST-запроса
       const { divisionID, subdiv_oneID, periodFrom, periodTo } = ctx.request.body;

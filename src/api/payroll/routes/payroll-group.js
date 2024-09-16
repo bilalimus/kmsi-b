@@ -15,8 +15,8 @@ module.exports = {
     },
     {
       method: "POST",
-      path: "/payroll-group/filter", // Новый маршрут для фильтрации
-      handler: "payroll-group.filter",
+      path: "/payroll-group/read", // Новый маршрут для фильтрации
+      handler: "payroll-group.read",
       config: {
         policies: [],
         middlewares: [],
