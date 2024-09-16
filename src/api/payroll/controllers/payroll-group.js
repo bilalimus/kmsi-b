@@ -72,15 +72,15 @@ module.exports = {
 
       // Применяем фильтр по divisionID, если он передан
       if (divisionID) {
-        filters['contragent.division'] = { id: divisionID };
+        filters['contragent.division.id'] = divisionID; // Обращаемся к ID напрямую
       }
 
-      // Применяем фильтр по subdiv_oneID, если он передан
-      if (subdiv_oneID) {
-        filters['contragent.subdiv_one'] = { id: subdiv_oneID };
+      // Применяем фильтр по subdiv_oneID, если он передан и не равен 0
+      if (subdiv_oneID && subdiv_oneID !== 0) {
+        filters['contragent.subdiv_one.id'] = subdiv_oneID; // Обращаемся к ID напрямую
       }
 
-      // Применяем фильтр по диапазону периодов
+      // Применяем фильтр по диапазону периодов только если оба значения переданы
       if (periodFrom && periodTo) {
         filters.$and = [
           { periodFrom: { $gte: periodFrom } }, // Период начинается с `periodFrom` или позже
