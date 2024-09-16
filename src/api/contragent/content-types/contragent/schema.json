@@ -55,12 +55,6 @@
         "company"
       ]
     },
-    "order_for_admission": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::order-for-admission.order-for-admission",
-      "mappedBy": "contragent"
-    },
     "division": {
       "type": "relation",
       "relation": "oneToOne",
@@ -70,6 +64,19 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::subdiv-one.subdiv-one"
+    },
+    "form": {
+      "type": "enumeration",
+      "enum": [
+        "full-time",
+        "part-time"
+      ]
+    },
+    "order_for_admission": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::order-for-admission.order-for-admission",
+      "mappedBy": "contragent"
     }
   }
 }

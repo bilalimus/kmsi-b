@@ -856,11 +856,6 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'api::subcompany.subcompany'
     >;
     type: Attribute.Enumeration<['person', 'company']>;
-    order_for_admission: Attribute.Relation<
-      'api::contragent.contragent',
-      'oneToOne',
-      'api::order-for-admission.order-for-admission'
-    >;
     division: Attribute.Relation<
       'api::contragent.contragent',
       'oneToOne',
@@ -870,6 +865,12 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'api::contragent.contragent',
       'oneToOne',
       'api::subdiv-one.subdiv-one'
+    >;
+    form: Attribute.Enumeration<['full-time', 'part-time']>;
+    order_for_admission: Attribute.Relation<
+      'api::contragent.contragent',
+      'oneToOne',
+      'api::order-for-admission.order-for-admission'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1064,6 +1065,14 @@ export interface ApiSubcompanySubcompany extends Schema.CollectionType {
       'manyToOne',
       'api::contragent.contragent'
     >;
+    regNumber: Attribute.String;
+    okpo: Attribute.String;
+    bik: Attribute.String;
+    ls: Attribute.String;
+    bank: Attribute.String;
+    address: Attribute.String;
+    inn: Attribute.String;
+    fullName: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
