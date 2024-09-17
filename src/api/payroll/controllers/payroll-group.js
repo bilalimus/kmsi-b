@@ -135,12 +135,12 @@ module.exports = {
           }
         );
 
-        if (existingPayroll.length > 0) {
-          return ctx.throw(
-            409,
-            `Запись для выбранных контрагентов за указанный период уже существует.`
-          );
-        }
+        // if (existingPayroll.length > 0) {
+        //   return ctx.throw(
+        //     409,
+        //     `Запись для выбранных контрагентов за указанный период уже существует.`
+        //   );
+        // }
 
        payrollEntries.push(existingPayroll);
       }
