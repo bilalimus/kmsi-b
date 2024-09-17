@@ -2,10 +2,14 @@ module.exports = {
   // Метод для создания записей (без изменений)
   async create(ctx) {
     try {
-      const { divisionID, subdiv_oneID, docDate, periodFrom, periodTo } = ctx.request.body;
+      const { divisionID, subdiv_oneID, docDate, periodFrom, periodTo } =
+        ctx.request.body;
 
       if (!docDate || !periodFrom || !periodTo) {
-        return ctx.throw(400, 'Поля docDate, periodFrom и periodTo обязательны.');
+        return ctx.throw(
+          400,
+          "Поля docDate, periodFrom и periodTo обязательны."
+        );
       }
 
       const filters = {};
@@ -18,45 +22,63 @@ module.exports = {
         filters.subdiv_one = { id: subdiv_oneID };
       }
 
-      const contragents = await strapi.entityService.findMany('api::contragent.contragent', {
-        filters,
-        populate: ['division', 'subdiv_one'],
-      });
+      const contragents = await strapi.entityService.findMany(
+        "api::contragent.contragent",
+        {
+          filters,
+          populate: ["division", "subdiv_one"],
+        }
+      );
 
       if (contragents.length === 0) {
-        return ctx.throw(404, 'Не найдено контрагентов для указанных критериев.');
+        return ctx.throw(
+          404,
+          "Не найдено контрагентов для указанных критериев."
+        );
       }
 
       const payrollEntries = [];
       for (const contragent of contragents) {
-        const existingPayroll = await strapi.entityService.findMany('api::payroll.payroll', {
-          filters: {
-            contragent: contragent.id,
-            periodFrom,
-            periodTo,
-          },
-        });
+        const existingPayroll = await strapi.entityService.findMany(
+          "api::payroll.payroll",
+          {
+            filters: {
+              contragent: contragent.id,
+              periodFrom,
+              periodTo,
+            },
+          }
+        );
 
         if (existingPayroll.length > 0) {
-          return ctx.throw(409, `Запись для выбранных контрагентов за указанный период уже существует.`);
+          return ctx.throw(
+            409,
+            `Запись для выбранных контрагентов за указанный период уже существует.`
+          );
         }
 
         const amount = calculateAmount(contragent);
 
-        const payrollEntry = await strapi.entityService.create('api::payroll.payroll', {
-          data: {
-            docDate,
-            periodFrom,
-            periodTo,
-            amount,
-            contragent: contragent.id,
-          },
-        });
+        const payrollEntry = await strapi.entityService.create(
+          "api::payroll.payroll",
+          {
+            data: {
+              docDate,
+              periodFrom,
+              periodTo,
+              amount,
+              contragent: contragent.id,
+            },
+          }
+        );
 
         payrollEntries.push(payrollEntry);
       }
 
-      ctx.send({ message: `${payrollEntries.length} записей успешно создано.`, data: payrollEntries });
+      ctx.send({
+        message: `${payrollEntries.length} записей успешно создано.`,
+        data: payrollEntries,
+      });
     } catch (err) {
       ctx.throw(500, `Ошибка сервера: ${err.message}`);
     }
@@ -65,47 +87,72 @@ module.exports = {
   // Метод для фильтрации записей Payroll
   async read(ctx) {
     try {
-      // Получаем фильтры из тела POST-запроса
-      const { divisionID, subdiv_oneID, periodFrom, periodTo } = ctx.request.body;
+      const { divisionID, subdiv_oneID, periodFrom, periodTo } =
+        ctx.request.body;
+
+      if (!periodFrom || !periodTo) {
+        return ctx.throw(
+          400,
+          "Поля docDate, periodFrom и periodTo обязательны."
+        );
+      }
 
       const filters = {};
 
-      // Применяем фильтр по divisionID, если он передан
       if (divisionID) {
-        filters['contragent.division.id'] = { $eq: divisionID };
+        filters.division = { id: divisionID };
       }
 
-      // Применяем фильтр по subdiv_oneID, если он передан и не равен 0
-      if (subdiv_oneID && subdiv_oneID !== 0) {
-        filters['contragent.subdiv_one.id'] = { $eq: subdiv_oneID };
+      if (subdiv_oneID) {
+        filters.subdiv_one = { id: subdiv_oneID };
       }
 
-      // Применяем фильтр по диапазону периодов только если оба значения переданы
-      if (periodFrom && periodTo) {
-        filters.$and = [
-          { periodFrom: { $gte: new Date(periodFrom) } }, // Конвертируем в объект Date
-          { periodTo: { $lte: new Date(periodTo) } },     // Конвертируем в объект Date
-        ];
+      const contragents = await strapi.entityService.findMany(
+        "api::contragent.contragent",
+        {
+          filters,
+          populate: ["division", "subdiv_one"],
+        }
+      );
+
+      if (contragents.length === 0) {
+        return ctx.throw(
+          404,
+          "Не найдено контрагентов для указанных критериев."
+        );
       }
 
-      // Выполняем запрос для фильтрации записей Payroll
-      const payrollRecords = await strapi.entityService.findMany('api::payroll.payroll', {
-        filters,
-        populate: ['contragent.division', 'contragent.subdiv_one'], // Загружаем данные о контрагентах и их связях
+      const payrollEntries = [];
+      for (const contragent of contragents) {
+        const existingPayroll = await strapi.entityService.findMany(
+          "api::payroll.payroll",
+          {
+            filters: {
+              contragent: contragent.id,
+              periodFrom,
+              periodTo,
+            },
+          }
+        );
+
+        if (existingPayroll.length > 0) {
+          return ctx.throw(
+            409,
+            `Запись для выбранных контрагентов за указанный период уже существует.`
+          );
+        }
+
+       payrollEntries.push(existingPayroll);
+      }
+
+      ctx.send({
+        message: `${payrollEntries.length} записей`,
+        data: payrollEntries,
       });
-
-      // Если не найдены записи Payroll
-      if (payrollRecords.length === 0) {
-        return ctx.throw(404, 'Не найдено записей Payroll для указанных критериев.');
-      }
-
-      // Возвращаем найденные записи Payroll
-      ctx.send({ message: `${payrollRecords.length} записей Payroll найдено.`, data: payrollRecords });
     } catch (err) {
       ctx.throw(500, `Ошибка сервера: ${err.message}`);
     }
   },
-
 };
 
 // Пример функции для вычисления суммы (amount)
