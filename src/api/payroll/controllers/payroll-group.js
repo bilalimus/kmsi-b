@@ -99,11 +99,11 @@ module.exports = {
 
       const filters = {};
 
-      if (divisionID) {
+      if (divisionID && divisionID != 0) {
         filters.division = { id: divisionID };
       }
 
-      if (subdiv_oneID) {
+      if (subdiv_oneID && subdiv_oneID !=0) {
         filters.subdiv_one = { id: subdiv_oneID };
       }
 
@@ -136,7 +136,7 @@ module.exports = {
           }
         );
 
-       payrollEntries.push(existingPayroll);
+       payrollEntries.push(...existingPayroll);
       }
 
       ctx.send({
