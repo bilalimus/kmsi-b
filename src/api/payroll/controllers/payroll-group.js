@@ -132,7 +132,7 @@ module.exports = {
               periodFrom,
               periodTo,
             },
-            populate: ['contragent.division']
+            populate: ['contragent.division', 'contragent.subdiv_one']
           }
         );
 
