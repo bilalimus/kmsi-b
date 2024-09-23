@@ -8,7 +8,7 @@ module.exports = {
       if (!docDate || !periodFrom || !periodTo) {
         return ctx.throw(
           400,
-          "Поля docDate, periodFrom и periodTo обязательны."
+          "Поля docDate, periodFrom и periodTo обязательны.",
         );
       }
 
@@ -18,7 +18,7 @@ module.exports = {
         filters.division = { id: divisionID };
       }
 
-      if (subdiv_oneID && subdiv_oneID !=0) {
+      if (subdiv_oneID && subdiv_oneID != 0) {
         filters.subdiv_one = { id: subdiv_oneID };
       }
 
@@ -27,13 +27,13 @@ module.exports = {
         {
           filters,
           populate: ["division", "subdiv_one"],
-        }
+        },
       );
 
       if (contragents.length === 0) {
         return ctx.throw(
           404,
-          "Не найдено контрагентов для указанных критериев."
+          "Не найдено контрагентов для указанных критериев.",
         );
       }
 
@@ -47,13 +47,13 @@ module.exports = {
               periodFrom,
               periodTo,
             },
-          }
+          },
         );
 
         if (existingPayroll.length > 0) {
           return ctx.throw(
             409,
-            `Запись для выбранных контрагентов за указанный период уже существует.`
+            `Запись для выбранных контрагентов за указанный период уже существует.`,
           );
         }
 
@@ -69,7 +69,7 @@ module.exports = {
               amount,
               contragent: contragent.id,
             },
-          }
+          },
         );
 
         payrollEntries.push(payrollEntry);
@@ -93,7 +93,7 @@ module.exports = {
       if (!periodFrom || !periodTo) {
         return ctx.throw(
           400,
-          "Поля docDate, periodFrom и periodTo обязательны."
+          "Поля docDate, periodFrom и periodTo обязательны.",
         );
       }
 
@@ -103,7 +103,7 @@ module.exports = {
         filters.division = { id: divisionID };
       }
 
-      if (subdiv_oneID && subdiv_oneID !=0) {
+      if (subdiv_oneID && subdiv_oneID != 0) {
         filters.subdiv_one = { id: subdiv_oneID };
       }
 
@@ -112,13 +112,13 @@ module.exports = {
         {
           filters,
           populate: ["division", "subdiv_one"],
-        }
+        },
       );
 
       if (contragents.length === 0) {
         return ctx.throw(
           404,
-          "Не найдено контрагентов для указанных критериев."
+          "Не найдено контрагентов для указанных критериев.",
         );
       }
 
@@ -132,11 +132,11 @@ module.exports = {
               periodFrom,
               periodTo,
             },
-            populate: ['contragent.division', 'contragent.subdiv_one']
-          }
+            populate: ["contragent.division", "contragent.subdiv_one"],
+          },
         );
 
-       payrollEntries.push(...existingPayroll);
+        payrollEntries.push(...existingPayroll);
       }
 
       ctx.send({

@@ -1,27 +1,32 @@
 {
   "parser": "babel-eslint",
-  "extends": "eslint:recommended",
+  "extends": [
+      "eslint:recommended",
+      "plugin:prettier/recommended"  // Добавлено для интеграции с Prettier
+    ],
   "env": {
-    "commonjs": true,
-    "es6": true,
-    "node": true,
-    "browser": false
-  },
-  "parserOptions": {
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "jsx": false
+      "commonjs": true,
+      "es6": true,
+      "node": true,
+      "browser": false
     },
-    "sourceType": "module"
-  },
+  "parserOptions": {
+      "ecmaFeatures": {
+            "experimentalObjectRestSpread": true,
+            "jsx": false
+          },
+      "sourceType": "module"
+    },
   "globals": {
-    "strapi": true
-  },
+      "strapi": true
+    },
   "rules": {
-    "indent": ["error", 2, { "SwitchCase": 1 }],
-    "linebreak-style": ["error", "unix"],
-    "no-console": 0,
-    "quotes": ["error", "single"],
-    "semi": ["error", "always"]
-  }
+      "indent": ["error", 2, { "SwitchCase": 1  }],
+      "linebreak-style": ["error", "unix"],
+      "no-console": 0,
+      "quotes": ["error", "single"],
+      "semi": ["error", "always"],
+      "prettier/prettier": ["error"]  // Добавлено для настройки правил Prettier
+    }
 }
+
