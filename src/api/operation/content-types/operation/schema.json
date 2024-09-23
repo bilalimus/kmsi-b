@@ -1,0 +1,65 @@
+{
+  "kind": "collectionType",
+  "collectionName": "operations",
+  "info": {
+    "singularName": "operation",
+    "pluralName": "operations",
+    "displayName": "Operation",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "docDate": {
+      "type": "date"
+    },
+    "contract": {
+      "type": "decimal",
+      "required": true
+    },
+    "docNumber": {
+      "type": "biginteger",
+      "required": true,
+      "unique": true
+    },
+    "periodFrom": {
+      "type": "date",
+      "required": true
+    },
+    "periodTo": {
+      "type": "date",
+      "required": true
+    },
+    "basedOn": {
+      "type": "string"
+    },
+    "contragent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::contragent.contragent",
+      "inversedBy": "operations"
+    },
+    "division": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::division.division"
+    },
+    "subdiv_one": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::subdiv-one.subdiv-one"
+    },
+    "oper_type": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::oper-type.oper-type"
+    },
+    "autor": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}

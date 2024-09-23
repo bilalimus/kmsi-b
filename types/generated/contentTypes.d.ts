@@ -867,10 +867,10 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'api::subdiv-one.subdiv-one'
     >;
     form: Attribute.Enumeration<['full-time', 'part-time']>;
-    order_for_admission: Attribute.Relation<
+    operations: Attribute.Relation<
       'api::contragent.contragent',
-      'oneToOne',
-      'api::order-for-admission.order-for-admission'
+      'oneToMany',
+      'api::operation.operation'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -919,45 +919,95 @@ export interface ApiDivisionDivision extends Schema.CollectionType {
   };
 }
 
-export interface ApiOrderForAdmissionOrderForAdmission
-  extends Schema.CollectionType {
-  collectionName: 'order_for_admissions';
+export interface ApiOperTypeOperType extends Schema.CollectionType {
+  collectionName: 'oper_types';
   info: {
-    singularName: 'order-for-admission';
-    pluralName: 'order-for-admissions';
-    displayName: 'OrderForAdmission';
+    singularName: 'oper-type';
+    pluralName: 'oper-types';
+    displayName: 'OperType';
     description: '';
   };
   options: {
     draftAndPublish: false;
   };
   attributes: {
-    docDate: Attribute.Date & Attribute.Required;
-    docNumber: Attribute.BigInteger & Attribute.Required & Attribute.Unique;
-    amount: Attribute.Decimal & Attribute.Required;
-    contragent: Attribute.Relation<
-      'api::order-for-admission.order-for-admission',
-      'oneToOne',
-      'api::contragent.contragent'
-    >;
-    autor: Attribute.Relation<
-      'api::order-for-admission.order-for-admission',
-      'oneToMany',
-      'plugin::users-permissions.user'
-    >;
-    basedOn: Attribute.String;
-    periodFrom: Attribute.Date;
-    periodTo: Attribute.Date;
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.Unique &
+      Attribute.SetMinMaxLength<{
+        minLength: 6;
+        maxLength: 20;
+      }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::order-for-admission.order-for-admission',
+      'api::oper-type.oper-type',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::order-for-admission.order-for-admission',
+      'api::oper-type.oper-type',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiOperationOperation extends Schema.CollectionType {
+  collectionName: 'operations';
+  info: {
+    singularName: 'operation';
+    pluralName: 'operations';
+    displayName: 'Operation';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    docDate: Attribute.Date;
+    contract: Attribute.Decimal & Attribute.Required;
+    docNumber: Attribute.BigInteger & Attribute.Required & Attribute.Unique;
+    periodFrom: Attribute.Date & Attribute.Required;
+    periodTo: Attribute.Date & Attribute.Required;
+    basedOn: Attribute.String;
+    contragent: Attribute.Relation<
+      'api::operation.operation',
+      'manyToOne',
+      'api::contragent.contragent'
+    >;
+    division: Attribute.Relation<
+      'api::operation.operation',
+      'oneToMany',
+      'api::division.division'
+    >;
+    subdiv_one: Attribute.Relation<
+      'api::operation.operation',
+      'oneToMany',
+      'api::subdiv-one.subdiv-one'
+    >;
+    oper_type: Attribute.Relation<
+      'api::operation.operation',
+      'oneToMany',
+      'api::oper-type.oper-type'
+    >;
+    autor: Attribute.Relation<
+      'api::operation.operation',
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::operation.operation',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::operation.operation',
       'oneToOne',
       'admin::user'
     > &
@@ -1020,6 +1070,14 @@ export interface ApiPositionPosition extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
+    priority: Attribute.Integer &
+      Attribute.Unique &
+      Attribute.SetMinMax<
+        {
+          max: 12;
+        },
+        number
+      >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1140,7 +1198,8 @@ declare module '@strapi/types' {
       'api::company.company': ApiCompanyCompany;
       'api::contragent.contragent': ApiContragentContragent;
       'api::division.division': ApiDivisionDivision;
-      'api::order-for-admission.order-for-admission': ApiOrderForAdmissionOrderForAdmission;
+      'api::oper-type.oper-type': ApiOperTypeOperType;
+      'api::operation.operation': ApiOperationOperation;
       'api::payroll.payroll': ApiPayrollPayroll;
       'api::position.position': ApiPositionPosition;
       'api::subcompany.subcompany': ApiSubcompanySubcompany;

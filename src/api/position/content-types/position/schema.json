@@ -19,6 +19,11 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "priority": {
+      "type": "integer",
+      "unique": true,
+      "max": 12
     }
   }
 }

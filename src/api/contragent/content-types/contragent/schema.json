@@ -72,10 +72,10 @@
         "part-time"
       ]
     },
-    "order_for_admission": {
+    "operations": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::order-for-admission.order-for-admission",
+      "relation": "oneToMany",
+      "target": "api::operation.operation",
       "mappedBy": "contragent"
     }
   }

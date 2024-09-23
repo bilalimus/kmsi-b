@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "oper_types",
+  "info": {
+    "singularName": "oper-type",
+    "pluralName": "oper-types",
+    "displayName": "OperType",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "minLength": 6,
+      "maxLength": 20
+    }
+  }
+}
