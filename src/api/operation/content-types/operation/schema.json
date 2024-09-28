@@ -25,7 +25,7 @@
       "unique": true
     },
     "periodFrom": {
-      "type": "date",
+      "type": "datetime",
       "required": true
     },
     "periodTo": {

@@ -107,41 +107,70 @@ module.exports = {
         filters.subdiv_one = { id: subdiv_oneID };
       }
 
-      const contragents = await strapi.entityService.findMany(
-        "api::contragent.contragent",
+      filters.periodFrom = { $lte: periodFrom };
+      filters.periodTo = { $gte: periodTo };
+
+      const contragentWithType3 = await strapi.entityService.findMany(
+        "api::operation.operation",
         {
-          filters,
-          populate: ["division", "subdiv_one"],
+          filters: { oper_type: 3 },
+          populate: ["contragent"],
         },
       );
 
-      if (contragents.length === 0) {
+      const excludedContragentIds = contragentWithType3.map(
+        (operation) => operation.contragent.id,
+      );
+
+      filters.oper_type = { $in: [1, 2] };
+      if (excludedContragentIds.length > 0) {
+        filters.contragent = { id: { $notIn: excludedContragentIds } };
+      }
+
+      console.log("Фильтры для операций:", filters);
+
+      const operations = await strapi.entityService.findMany(
+        "api::operation.operation",
+        {
+          filters,
+          populate: ["division", "subdiv_one", "oper_type", "contragent"],
+        },
+      );
+      console.log("test");
+      console.log(
+        "Запрашиваемый период",
+        new Date(periodFrom),
+        new Date(periodTo),
+      );
+      operations.map((item) => console.log(item.contragent.id));
+
+      if (operations.length === 0) {
         return ctx.throw(
           404,
-          "Не найдено контрагентов для указанных критериев.",
+          "Не найдено контрагентов для указанных критериев",
         );
       }
 
-      const payrollEntries = [];
-      for (const contragent of contragents) {
-        const existingPayroll = await strapi.entityService.findMany(
-          "api::payroll.payroll",
-          {
-            filters: {
-              contragent: contragent.id,
-              periodFrom,
-              periodTo,
-            },
-            populate: ["contragent.division", "contragent.subdiv_one"],
-          },
-        );
-
-        payrollEntries.push(...existingPayroll);
-      }
+      //      const payrollEntries = [];
+      //      for (const operation of operations) {
+      //        const existingPayroll = await strapi.entityService.findMany(
+      //          "api::payroll.payroll",
+      //          {
+      //            filters: {
+      //              contragent: operation.contragent.id,
+      //              periodFrom,
+      //              periodTo,
+      //            },
+      //            populate: ["contragent.division", "contragent.subdiv_one"],
+      //          },
+      //        );
+      //
+      //        payrollEntries.push(...existingPayroll);
+      //      }
 
       ctx.send({
-        message: `${payrollEntries.length} записей`,
-        data: payrollEntries,
+        message: `${operations.length} записей`,
+        data: operations,
       });
     } catch (err) {
       ctx.throw(500, `Ошибка сервера: ${err.message}`);
