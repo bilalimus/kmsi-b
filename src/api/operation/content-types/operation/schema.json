@@ -43,22 +43,22 @@
     },
     "division": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "oneToOne",
       "target": "api::division.division"
     },
     "subdiv_one": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "oneToOne",
       "target": "api::subdiv-one.subdiv-one"
     },
     "oper_type": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "oneToOne",
       "target": "api::oper-type.oper-type"
     },
     "autor": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
     }
   }

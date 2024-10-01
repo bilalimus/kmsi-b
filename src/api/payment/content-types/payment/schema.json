@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "payments",
+  "info": {
+    "singularName": "payment",
+    "pluralName": "payments",
+    "displayName": "Payment"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "payment_id": {
+      "type": "biginteger",
+      "required": true,
+      "unique": true
+    },
+    "source": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "decimal"
+    },
+    "desc": {
+      "type": "string"
+    },
+    "paid_ad": {
+      "type": "datetime"
+    },
+    "payment_purpose": {
+      "type": "string"
+    },
+    "aggregator_inn": {
+      "type": "string",
+      "maxLength": 14,
+      "minLength": 14
+    },
+    "contragent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::contragent.contragent",
+      "inversedBy": "payments"
+    }
+  }
+}

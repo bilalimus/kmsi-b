@@ -55,16 +55,6 @@
         "company"
       ]
     },
-    "division": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::division.division"
-    },
-    "subdiv_one": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::subdiv-one.subdiv-one"
-    },
     "form": {
       "type": "enumeration",
       "enum": [
@@ -76,6 +66,12 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::operation.operation",
+      "mappedBy": "contragent"
+    },
+    "payments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::payment.payment",
       "mappedBy": "contragent"
     }
   }

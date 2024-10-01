@@ -856,21 +856,16 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'api::subcompany.subcompany'
     >;
     type: Attribute.Enumeration<['person', 'company']>;
-    division: Attribute.Relation<
-      'api::contragent.contragent',
-      'oneToOne',
-      'api::division.division'
-    >;
-    subdiv_one: Attribute.Relation<
-      'api::contragent.contragent',
-      'oneToOne',
-      'api::subdiv-one.subdiv-one'
-    >;
     form: Attribute.Enumeration<['full-time', 'part-time']>;
     operations: Attribute.Relation<
       'api::contragent.contragent',
       'oneToMany',
       'api::operation.operation'
+    >;
+    payments: Attribute.Relation<
+      'api::contragent.contragent',
+      'oneToMany',
+      'api::payment.payment'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -980,22 +975,22 @@ export interface ApiOperationOperation extends Schema.CollectionType {
     >;
     division: Attribute.Relation<
       'api::operation.operation',
-      'oneToMany',
+      'oneToOne',
       'api::division.division'
     >;
     subdiv_one: Attribute.Relation<
       'api::operation.operation',
-      'oneToMany',
+      'oneToOne',
       'api::subdiv-one.subdiv-one'
     >;
     oper_type: Attribute.Relation<
       'api::operation.operation',
-      'oneToMany',
+      'oneToOne',
       'api::oper-type.oper-type'
     >;
     autor: Attribute.Relation<
       'api::operation.operation',
-      'oneToMany',
+      'oneToOne',
       'plugin::users-permissions.user'
     >;
     createdAt: Attribute.DateTime;
@@ -1015,12 +1010,58 @@ export interface ApiOperationOperation extends Schema.CollectionType {
   };
 }
 
+export interface ApiPaymentPayment extends Schema.CollectionType {
+  collectionName: 'payments';
+  info: {
+    singularName: 'payment';
+    pluralName: 'payments';
+    displayName: 'Payment';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    payment_id: Attribute.BigInteger & Attribute.Required & Attribute.Unique;
+    source: Attribute.String;
+    amount: Attribute.Decimal;
+    desc: Attribute.String;
+    paid_ad: Attribute.DateTime;
+    payment_purpose: Attribute.String;
+    aggregator_inn: Attribute.String &
+      Attribute.SetMinMaxLength<{
+        minLength: 14;
+        maxLength: 14;
+      }>;
+    contragent: Attribute.Relation<
+      'api::payment.payment',
+      'manyToOne',
+      'api::contragent.contragent'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::payment.payment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::payment.payment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiPayrollPayroll extends Schema.CollectionType {
   collectionName: 'payrolls';
   info: {
     singularName: 'payroll';
     pluralName: 'payrolls';
     displayName: 'Payroll';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1034,6 +1075,21 @@ export interface ApiPayrollPayroll extends Schema.CollectionType {
       'api::payroll.payroll',
       'oneToOne',
       'api::contragent.contragent'
+    >;
+    division: Attribute.Relation<
+      'api::payroll.payroll',
+      'oneToOne',
+      'api::division.division'
+    >;
+    subdiv_one: Attribute.Relation<
+      'api::payroll.payroll',
+      'oneToOne',
+      'api::subdiv-one.subdiv-one'
+    >;
+    autor: Attribute.Relation<
+      'api::payroll.payroll',
+      'oneToOne',
+      'plugin::users-permissions.user'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1200,6 +1256,7 @@ declare module '@strapi/types' {
       'api::division.division': ApiDivisionDivision;
       'api::oper-type.oper-type': ApiOperTypeOperType;
       'api::operation.operation': ApiOperationOperation;
+      'api::payment.payment': ApiPaymentPayment;
       'api::payroll.payroll': ApiPayrollPayroll;
       'api::position.position': ApiPositionPosition;
       'api::subcompany.subcompany': ApiSubcompanySubcompany;

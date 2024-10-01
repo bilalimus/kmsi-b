@@ -4,7 +4,8 @@
   "info": {
     "singularName": "payroll",
     "pluralName": "payrolls",
-    "displayName": "Payroll"
+    "displayName": "Payroll",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -31,6 +32,21 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::contragent.contragent"
+    },
+    "division": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::division.division"
+    },
+    "subdiv_one": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::subdiv-one.subdiv-one"
+    },
+    "autor": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
     }
   }
 }
