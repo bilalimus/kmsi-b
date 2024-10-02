@@ -4,8 +4,8 @@ module.exports = {
   routes: [
     {
       method: "GET",
-      path: "/payment/synchronize/get",
-      handler: "synchronize.get",
+      path: "/payment/synchronize/receive",
+      handler: "synchronize.receive",
       config: {
         polices: [],
         middlewares: [],

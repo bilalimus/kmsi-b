@@ -1,26 +1,17 @@
 "use strict";
-
-/**
- * A set of functions called "actions" for `synchronize`
- */
+const { apiUrl, authHeader } = require("../../../../payget_conf");
 const fetch = require("node-fetch");
 
-const apiUrl = "https://pay.get.kg/api/payment/list";
-const login = "bilalimus@gmail.com";
-const password = "dtP5nRWx";
-
-const authString = `${login}:${password}`;
-const authHeader = `Basic ${Buffer.from(authString).toString("base64")}`;
-
 module.exports = {
-  get: async (ctx) => {
+  receive: async (ctx) => {
     const requestBody = {
       region: 11,
       date_from: "2024-02-01",
       date_to: "2024-02-01",
     };
+    console.log(apiUrl, authHeader);
     try {
-      const response = await fetch(apiUrl, {
+      const response = await fetch(`${apiUrl}/payment/list`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
