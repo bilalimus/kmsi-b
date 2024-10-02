@@ -867,6 +867,11 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'oneToMany',
       'api::payment.payment'
     >;
+    payrolls: Attribute.Relation<
+      'api::contragent.contragent',
+      'oneToMany',
+      'api::payroll.payroll'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1016,16 +1021,17 @@ export interface ApiPaymentPayment extends Schema.CollectionType {
     singularName: 'payment';
     pluralName: 'payments';
     displayName: 'Payment';
+    description: '';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     payment_id: Attribute.BigInteger & Attribute.Required & Attribute.Unique;
     source: Attribute.String;
     amount: Attribute.Decimal;
     desc: Attribute.String;
-    paid_ad: Attribute.DateTime;
+    paid_at: Attribute.DateTime;
     payment_purpose: Attribute.String;
     aggregator_inn: Attribute.String &
       Attribute.SetMinMaxLength<{
@@ -1039,7 +1045,6 @@ export interface ApiPaymentPayment extends Schema.CollectionType {
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::payment.payment',
       'oneToOne',
@@ -1073,7 +1078,7 @@ export interface ApiPayrollPayroll extends Schema.CollectionType {
     amount: Attribute.Decimal & Attribute.Required;
     contragent: Attribute.Relation<
       'api::payroll.payroll',
-      'oneToOne',
+      'manyToOne',
       'api::contragent.contragent'
     >;
     division: Attribute.Relation<

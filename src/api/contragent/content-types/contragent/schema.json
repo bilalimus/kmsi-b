@@ -73,6 +73,12 @@
       "relation": "oneToMany",
       "target": "api::payment.payment",
       "mappedBy": "contragent"
+    },
+    "payrolls": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::payroll.payroll",
+      "mappedBy": "contragent"
     }
   }
 }
