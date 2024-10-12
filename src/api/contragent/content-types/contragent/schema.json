@@ -15,21 +15,17 @@
     "name": {
       "type": "string",
       "required": true,
-      "unique": true
+      "unique": false
     },
     "inn": {
-      "type": "string",
-      "minLength": 14,
-      "maxLength": 14
+      "type": "string"
     },
     "ls": {
       "type": "string",
       "unique": true
     },
     "resident": {
-      "type": "string",
-      "maxLength": 3,
-      "minLength": 3
+      "type": "string"
     },
     "tel": {
       "type": "string"

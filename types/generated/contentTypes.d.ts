@@ -834,18 +834,10 @@ export interface ApiContragentContragent extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    name: Attribute.String & Attribute.Required & Attribute.Unique;
-    inn: Attribute.String &
-      Attribute.SetMinMaxLength<{
-        minLength: 14;
-        maxLength: 14;
-      }>;
+    name: Attribute.String & Attribute.Required;
+    inn: Attribute.String;
     ls: Attribute.String & Attribute.Unique;
-    resident: Attribute.String &
-      Attribute.SetMinMaxLength<{
-        minLength: 3;
-        maxLength: 3;
-      }>;
+    resident: Attribute.String;
     tel: Attribute.String;
     email: Attribute.Email;
     address: Attribute.String;

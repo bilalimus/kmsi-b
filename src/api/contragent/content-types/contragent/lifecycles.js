@@ -7,7 +7,7 @@ module.exports = {
 
     const newData = {
       full_name: data.name,
-      region: 13,
+      region: 11,
       comment: data.comment,
     };
     if (data.create_ls) {
