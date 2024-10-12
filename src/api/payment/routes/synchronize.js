@@ -3,7 +3,7 @@
 module.exports = {
   routes: [
     {
-      method: "GET",
+      method: "POST",
       path: "/payment/synchronize/receive",
       handler: "synchronize.receive",
       config: {

@@ -4,12 +4,12 @@ const fetch = require("node-fetch");
 
 module.exports = {
   receive: async (ctx) => {
+    const { region, date_from, date_to } = ctx.request.body;
     const requestBody = {
-      region: 11,
-      date_from: "2024-02-01",
-      date_to: "2024-02-01",
+      region,
+      date_from,
+      date_to,
     };
-    console.log(apiUrl, authHeader);
     try {
       const response = await fetch(`${apiUrl}/payment/list`, {
         method: "POST",
@@ -26,7 +26,6 @@ module.exports = {
         const responseData = await response.json();
 
         const paymentEntries = [];
-        const existingPayments = [];
         const warnings = [];
 
         for (const payment of responseData) {
