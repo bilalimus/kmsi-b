@@ -872,6 +872,7 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'oneToMany',
       'api::payroll.payroll'
     >;
+    create_ls: Attribute.Boolean & Attribute.Required & Attribute.Private;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

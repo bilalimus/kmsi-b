@@ -4,10 +4,10 @@ const { apiUrl, authHeader } = require("../../../../payget_conf");
 module.exports = {
   receive: async (ctx) => {
     const requestBody = {
-      region: 13,
+      region: 11,
     };
     try {
-      const response = await fetch(`https://sadik.kg/api/accounts/list`, {
+      const response = await fetch(`${apiUrl}/accounts/list`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24,23 +24,23 @@ module.exports = {
 
         const contragentEntries = [];
 
-        for (const account of responseData) {
-          const contragentEntry = await strapi.entityService.create(
-            "api::contragent.contragent",
-            {
-              data: {
-                name: account.full_name,
-                ls: account.account_no,
-                comment: `Комментарий: ${account.comment}, курс: ${account.group}, факультет: ${account.doo}`,
-              },
-            },
-          );
-          contragentEntries.push(contragentEntry);
-        }
-        ctx.send({
-          message: `${contragentEntries.length} записей успешно создано`,
-          data: contragentEntries,
-        });
+        //for (const account of responseData) {
+        //const contragentEntry = await strapi.entityService.create(
+        //"api::contragent.contragent",
+        //{
+        //data: {
+        //name: account.full_name,
+        //ls: account.account_no,
+        //comment: `Комментарий: ${account.comment}, курс: ${account.group}, факультет: ${account.doo}`,
+        //},
+        //},
+        //);
+        //contragentEntries.push(contragentEntry);
+        //}
+        //ctx.send({
+        //message: `${contragentEntries.length} записей успешно создано`,
+        //data: contragentEntries,
+        //});
       }
     } catch (err) {
       console.log("catch:", "error:", err, "message:", err.message);

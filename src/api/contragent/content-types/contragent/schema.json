@@ -80,6 +80,11 @@
       "relation": "oneToMany",
       "target": "api::payroll.payroll",
       "mappedBy": "contragent"
+    },
+    "create_ls": {
+      "type": "boolean",
+      "required": true,
+      "private": true
     }
   }
 }
