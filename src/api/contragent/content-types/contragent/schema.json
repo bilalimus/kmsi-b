@@ -23,7 +23,8 @@
       "maxLength": 14
     },
     "ls": {
-      "type": "string"
+      "type": "string",
+      "unique": true
     },
     "resident": {
       "type": "string",

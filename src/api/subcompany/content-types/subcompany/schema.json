@@ -55,6 +55,10 @@
     },
     "fullName": {
       "type": "string"
+    },
+    "region": {
+      "type": "integer",
+      "required": true
     }
   }
 }

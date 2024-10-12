@@ -840,7 +840,7 @@ export interface ApiContragentContragent extends Schema.CollectionType {
         minLength: 14;
         maxLength: 14;
       }>;
-    ls: Attribute.String;
+    ls: Attribute.String & Attribute.Unique;
     resident: Attribute.String &
       Attribute.SetMinMaxLength<{
         minLength: 3;
@@ -1192,6 +1192,7 @@ export interface ApiSubcompanySubcompany extends Schema.CollectionType {
     address: Attribute.String;
     inn: Attribute.String;
     fullName: Attribute.String;
+    region: Attribute.Integer & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
