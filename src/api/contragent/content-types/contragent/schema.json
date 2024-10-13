@@ -81,6 +81,16 @@
       "type": "boolean",
       "required": true,
       "private": true
+    },
+    "division": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::division.division"
+    },
+    "subdiv_one": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::subdiv-one.subdiv-one"
     }
   }
 }

@@ -865,6 +865,16 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'api::payroll.payroll'
     >;
     create_ls: Attribute.Boolean & Attribute.Required & Attribute.Private;
+    division: Attribute.Relation<
+      'api::contragent.contragent',
+      'oneToOne',
+      'api::division.division'
+    >;
+    subdiv_one: Attribute.Relation<
+      'api::contragent.contragent',
+      'oneToOne',
+      'api::subdiv-one.subdiv-one'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
