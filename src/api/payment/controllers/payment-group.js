@@ -6,7 +6,6 @@ module.exports = {
 
     const newPeriodTo = new Date(periodTo);
     newPeriodTo.setDate(newPeriodTo.getDate() + 1);
-    console.log("newPeriodTo", newPeriodTo);
 
     try {
       const paymentEntries = await strapi.entityService.findMany(
@@ -22,10 +21,15 @@ module.exports = {
               },
             ],
           },
-          populate: ["contragent"],
+          populate: {
+            contragent: {
+              fields: ["id", "name", "ls"],
+              populate: ["division", "subdiv_one"],
+            },
+          },
         },
       );
-      console.log("PaymentEntries:", paymentEntries);
+
       ctx.send({
         message: `${paymentEntries.length} записей найдено.`,
         data: paymentEntries,
