@@ -26,7 +26,6 @@ module.exports = {
         const responseData = await response.json();
 
         const paymentEntries = [];
-        const warnings = [];
 
         for (const payment of responseData) {
           const findedContragent = await strapi.entityService.findMany(
@@ -37,13 +36,43 @@ module.exports = {
               },
             },
           );
+          let addedContragent;
 
           if (findedContragent.length === 0) {
-            warnings.push(
+            console.log(
               `Не найден лицевой счет ${payment.account.account_no} для контрагента ${payment.account.full_name}`,
             );
-            continue;
+
+            let inn = "";
+            let resident = "";
+
+            if (payment.account.comment) {
+              const splittedComment = payment.account.comment.split("/");
+              if (splittedComment) {
+                const [inn_spl, resident_spl] = splittedComment;
+                inn = inn_spl;
+                resident = resident_spl;
+              }
+            }
+            const contragentEntry = await strapi.entityService.create(
+              "api::contragent.contragent",
+              {
+                data: {
+                  name: payment.account.full_name,
+                  ls: payment.account.account_no,
+                  comment: `Комментарий: ${payment.account.comment}, курс: ${payment.account.group}, факультет: ${payment.account.doo}`,
+                  inn,
+                  resident,
+                  create_ls: false,
+                },
+              },
+            );
+            addedContragent = contragentEntry;
+            console.log("Добавлен контрагент:", contragentEntry);
           }
+          console.log("addedContragent", addedContragent);
+
+          console.log("Before create payment", payment);
 
           const paymentEntry = await strapi.entityService.create(
             "api::payment.payment",
@@ -56,10 +85,13 @@ module.exports = {
                 paid_at: payment.paid_at,
                 payment_purpose: payment.payment_purpose,
                 aggregator_inn: payment.aggregator_inn,
-                contragent: findedContragent[0].id,
+                contragent: findedContragent[0].id
+                  ? findedContragent[0].id
+                  : addedContragent.id,
               },
             },
           );
+          console.log("paymentEntry", paymentEntry);
           const populatedPayment = await strapi.entityService.findOne(
             "api::payment.payment",
             paymentEntry.id,
@@ -71,7 +103,6 @@ module.exports = {
         }
         ctx.send({
           message: `${paymentEntries.length} записей успешно создано`,
-          warnings,
           data: paymentEntries,
         });
       }
