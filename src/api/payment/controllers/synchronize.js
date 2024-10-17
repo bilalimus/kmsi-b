@@ -77,6 +77,23 @@ module.exports = {
             continue; 
           }
 
+          // Проверка, существует ли уже платеж с таким payment_id
+          const existingPayment = await strapi.entityService.findMany(
+            'api::payment.payment',
+            {
+              filters: {
+                payment_id: payment.payment_id,
+              },
+            }
+          );
+
+          // Пропустить создание, если платеж уже существует
+          if (existingPayment.length > 0) {
+            console.log(`Платеж с ID ${payment.payment_id} уже существует, пропускаем.`);
+            index++;
+            continue;
+          }
+
           console.log('Before create payment', payment);
 
           const paymentEntry = await strapi.entityService.create(
@@ -121,4 +138,3 @@ module.exports = {
     }
   },
 };
-
