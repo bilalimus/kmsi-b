@@ -74,10 +74,9 @@ module.exports = {
 
             console.log('Добавлен контрагент:', contragentEntry);
 
-            continue; 
+            continue;
           }
 
-          // Проверка, существует ли уже платеж с таким payment_id
           const existingPayment = await strapi.entityService.findMany(
             'api::payment.payment',
             {
@@ -87,14 +86,13 @@ module.exports = {
             }
           );
 
-          // Пропустить создание, если платеж уже существует
           if (existingPayment.length > 0) {
-            console.log(`Платеж с ID ${payment.payment_id} уже существует, пропускаем.`);
+            console.log(
+              `Платеж с ID ${payment.payment_id} уже существует, пропускаем.`
+            );
             index++;
             continue;
           }
-
-          console.log('Before create payment', payment);
 
           const paymentEntry = await strapi.entityService.create(
             'api::payment.payment',
@@ -112,8 +110,6 @@ module.exports = {
             }
           );
 
-          console.log('paymentEntry', paymentEntry);
-
           const populatedPayment = await strapi.entityService.findOne(
             'api::payment.payment',
             paymentEntry.id,
@@ -123,7 +119,7 @@ module.exports = {
           );
 
           paymentEntries.push(populatedPayment);
-          
+
           index++;
         }
 
@@ -133,7 +129,7 @@ module.exports = {
         });
       }
     } catch (err) {
-      console.log("catch error:", err)
+      console.log('catch error:', err);
       ctx.throw(500, `Ошибка сервера: ${err.message}`);
     }
   },
