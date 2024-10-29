@@ -6,25 +6,25 @@ module.exports = {
         ctx.request.body;
 
       if (!docDate || !period || !autorID) {
-        return ctx.throw(400, "Поля docDate, autorID, period обязательны.");
+        return ctx.throw(400, 'Поля docDate, autorID, period обязательны.');
       }
-      const [year, month] = period.split("-");
+      const [year, month] = period.split('-');
       const monthAndYear = new Date(year, month);
 
       const periodFrom = new Date(
         monthAndYear.getFullYear(),
         monthAndYear.getMonth() - 1,
-        2,
+        2
       )
         .toISOString()
-        .split("T")[0];
+        .split('T')[0];
       const periodTo = new Date(
         monthAndYear.getFullYear(),
         monthAndYear.getMonth(),
-        1,
+        1
       )
         .toISOString()
-        .split("T")[0];
+        .split('T')[0];
       const filters = {};
 
       if (divisionID && divisionID != 0) {
@@ -39,15 +39,15 @@ module.exports = {
       filters.periodTo = { $gte: periodTo };
 
       const contragentWithType3 = await strapi.entityService.findMany(
-        "api::operation.operation",
+        'api::operation.operation',
         {
           filters: { oper_type: 3 },
-          populate: ["contragent"],
-        },
+          populate: ['contragent'],
+        }
       );
 
       const excludedContragentIds = contragentWithType3.map(
-        (operation) => operation.contragent.id,
+        (operation) => operation.contragent.id
       );
 
       filters.oper_type = { $in: [1, 2] };
@@ -56,44 +56,44 @@ module.exports = {
       }
 
       const operations = await strapi.entityService.findMany(
-        "api::operation.operation",
+        'api::operation.operation',
         {
           filters,
-          populate: ["division", "subdiv_one", "contragent"],
-        },
+          populate: ['division', 'subdiv_one', 'contragent'],
+        }
       );
 
       if (operations.length === 0) {
         return ctx.throw(
           404,
-          "Не найдено контрагентов для указанных критериев",
+          'Не найдено контрагентов для указанных критериев'
         );
       }
 
       const payrollEntries = [];
       for (const operation of operations) {
         const existingPayroll = await strapi.entityService.findMany(
-          "api::payroll.payroll",
+          'api::payroll.payroll',
           {
             filters: {
               contragent: operation.contragent.id,
               periodFrom,
               periodTo,
             },
-          },
+          }
         );
 
         if (existingPayroll.length > 0) {
           return ctx.throw(
             409,
-            `Запись для выбранных контрагентов за указанный период уже существует.`,
+            `Запись для выбранных контрагентов за указанный период уже существует.`
           );
         }
 
         const amount = calculateAmount(operation.contract);
 
         const payrollEntry = await strapi.entityService.create(
-          "api::payroll.payroll",
+          'api::payroll.payroll',
           {
             data: {
               docDate,
@@ -105,22 +105,23 @@ module.exports = {
               subdiv_one: operation.subdiv_one.id,
               autor: autorID,
             },
-          },
+          }
         );
 
         const populatedPayrollEntry = await strapi.entityService.findOne(
-          "api::payroll.payroll",
+          'api::payroll.payroll',
           payrollEntry.id,
           {
             populate: {
               contragent: true,
+              service: true,
               division: true,
               subdiv_one: true,
               autor: {
-                fields: ["id", "username", "usersurname"],
+                fields: ['id', 'username', 'usersurname'],
               },
             },
-          },
+          }
         );
 
         payrollEntries.push(populatedPayrollEntry);
@@ -140,26 +141,26 @@ module.exports = {
       const { divisionID, subdiv_oneID, period } = ctx.request.body;
 
       if (!period) {
-        return ctx.throw(400, "Поле period обязателен.");
+        return ctx.throw(400, 'Поле period обязателен.');
       }
 
-      const [year, month] = period.split("-");
+      const [year, month] = period.split('-');
       const monthAndYear = new Date(year, month);
 
       const periodFrom = new Date(
         monthAndYear.getFullYear(),
         monthAndYear.getMonth() - 1,
-        2,
+        2
       )
         .toISOString()
-        .split("T")[0];
+        .split('T')[0];
       const periodTo = new Date(
         monthAndYear.getFullYear(),
         monthAndYear.getMonth(),
-        1,
+        1
       )
         .toISOString()
-        .split("T")[0];
+        .split('T')[0];
 
       const filters = {};
 
@@ -175,22 +176,23 @@ module.exports = {
       filters.periodTo = { $gte: periodTo };
 
       const payrollEntries = await strapi.entityService.findMany(
-        "api::payroll.payroll",
+        'api::payroll.payroll',
         {
           filters,
           populate: {
             contragent: true,
+            service: true,
             division: true,
             subdiv_one: true,
             autor: {
-              fields: ["id", "username", "usersurname"],
+              fields: ['id', 'username', 'usersurname'],
             },
           },
-        },
+        }
       );
 
       if (payrollEntries.length === 0) {
-        return ctx.throw(404, "Не найдено записей для указанных критериев");
+        return ctx.throw(404, 'Не найдено записей для указанных критериев');
       }
 
       ctx.send({

@@ -48,6 +48,18 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "service": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::service.service"
+    },
+    "canceled": {
+      "type": "boolean",
+      "default": false
+    },
+    "comment": {
+      "type": "string"
     }
   }
 }

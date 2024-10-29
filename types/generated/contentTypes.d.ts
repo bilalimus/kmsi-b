@@ -1099,6 +1099,13 @@ export interface ApiPayrollPayroll extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
+    service: Attribute.Relation<
+      'api::payroll.payroll',
+      'oneToOne',
+      'api::service.service'
+    >;
+    canceled: Attribute.Boolean & Attribute.DefaultTo<false>;
+    comment: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1152,6 +1159,36 @@ export interface ApiPositionPosition extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::position.position',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiServiceService extends Schema.CollectionType {
+  collectionName: 'services';
+  info: {
+    singularName: 'service';
+    pluralName: 'services';
+    displayName: 'Service';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    title: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::service.service',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::service.service',
       'oneToOne',
       'admin::user'
     > &
@@ -1268,6 +1305,7 @@ declare module '@strapi/types' {
       'api::payment.payment': ApiPaymentPayment;
       'api::payroll.payroll': ApiPayrollPayroll;
       'api::position.position': ApiPositionPosition;
+      'api::service.service': ApiServiceService;
       'api::subcompany.subcompany': ApiSubcompanySubcompany;
       'api::subdiv-one.subdiv-one': ApiSubdivOneSubdivOne;
     }
