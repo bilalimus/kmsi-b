@@ -9,6 +9,7 @@ module.exports = [
         'https://kmsi.get.kg',
         'http://localhost:3030',
         'http://localhost:1337',
+        'http://192.168.10.106:3030',
       ],
     },
   },
