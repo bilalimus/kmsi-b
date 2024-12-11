@@ -1,4 +1,4 @@
-const apiUrl = 'https://sadik.kg/api';
+const apiUrl = 'https://pay.get.kg/api';
 const login = 'bilalimus@gmail.com';
 const password = 'dtP5nRWx';
 
