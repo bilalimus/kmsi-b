@@ -56,7 +56,8 @@
       "type": "enumeration",
       "enum": [
         "full-time",
-        "part-time"
+        "part-time",
+        "зарегистрирован"
       ]
     },
     "operations": {
@@ -91,6 +92,19 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::subdiv-one.subdiv-one"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "зарегистрирован",
+        "зачислен",
+        "перемещен",
+        "отчислен"
+      ]
+    },
+    "gns": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

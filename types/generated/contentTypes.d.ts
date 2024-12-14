@@ -848,7 +848,13 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'api::subcompany.subcompany'
     >;
     type: Attribute.Enumeration<['person', 'company']>;
-    form: Attribute.Enumeration<['full-time', 'part-time']>;
+    form: Attribute.Enumeration<
+      [
+        'full-time',
+        'part-time',
+        '\u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u043D'
+      ]
+    >;
     operations: Attribute.Relation<
       'api::contragent.contragent',
       'oneToMany',
@@ -875,6 +881,15 @@ export interface ApiContragentContragent extends Schema.CollectionType {
       'oneToOne',
       'api::subdiv-one.subdiv-one'
     >;
+    status: Attribute.Enumeration<
+      [
+        '\u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u043D',
+        '\u0437\u0430\u0447\u0438\u0441\u043B\u0435\u043D',
+        '\u043F\u0435\u0440\u0435\u043C\u0435\u0449\u0435\u043D',
+        '\u043E\u0442\u0447\u0438\u0441\u043B\u0435\u043D'
+      ]
+    >;
+    gns: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
