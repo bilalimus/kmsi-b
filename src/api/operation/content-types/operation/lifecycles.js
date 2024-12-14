@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   async afterCreate(event) {
@@ -7,32 +7,32 @@ module.exports = {
 
     try {
       const operation = await strapi.entityService.findOne(
-        "api::operation.operation",
+        'api::operation.operation',
         operationID,
         {
-          populate: ["contragent", "division", "subdiv_one"],
-        },
+          populate: ['contragent', 'division', 'subdiv_one'],
+        }
       );
 
       const { contragent, division, subdiv_one } = operation;
 
       if (contragent && contragent.id) {
         await strapi.entityService.update(
-          "api::contragent.contragent",
+          'api::contragent.contragent',
           contragent.id,
           {
             data: {
               division: division ? division.id : null,
               subdiv_one: subdiv_one ? subdiv_one.id : null,
             },
-          },
+          }
         );
         console.log(`Контрагент с ID ${contragent.id} успешно обновлен.`);
       } else {
-        console.log("Контрагент не указан для этой операции.");
+        console.log('Контрагент не указан для этой операции.');
       }
     } catch (error) {
-      console.log("Ошибка при обновлении данных контрагента:", error);
+      console.log('Ошибка при обновлении данных контрагента:', error);
     }
   },
 
@@ -42,32 +42,69 @@ module.exports = {
 
     try {
       const operation = await strapi.entityService.findOne(
-        "api::operation.operation",
+        'api::operation.operation',
         operationID,
         {
-          populate: ["contragent", "division", "subdiv_one"],
-        },
+          populate: ['contragent', 'division', 'subdiv_one', 'oper_type'],
+        }
       );
 
       const { contragent, division, subdiv_one } = operation;
 
       if (contragent && contragent.id) {
         await strapi.entityService.update(
-          "api::contragent.contragent",
+          'api::contragent.contragent',
           contragent.id,
           {
             data: {
               division: division ? division.id : null,
               subdiv_one: subdiv_one ? subdiv_one.id : null,
             },
-          },
+          }
         );
         console.log(`Контрагент с ID ${contragent.id} успешно обновлен.`);
       } else {
-        console.log("Контрагент не указан для этой операции.");
+        console.log('Контрагент не указан для этой операции.');
+      }
+      switch (operation.oper_type.id) {
+        case 1:
+          await strapi.entityService.update(
+            'api::contragent.contragent',
+            contragent.id,
+            {
+              data: {
+                status: 'зачислен',
+              },
+            }
+          );
+          break;
+        case 2:
+          await strapi.entityService.update(
+            'api::contragent.contragent',
+            contragent.id,
+            {
+              data: {
+                status: 'перемещен',
+              },
+            }
+          );
+          break;
+        case 3:
+          await strapi.entityService.update(
+            'api::contragent.contragent',
+            contragent.id,
+            {
+              data: {
+                status: 'отчислен',
+              },
+            }
+          );
+          break;
+        default:
+          break;
       }
     } catch (error) {
-      console.log("Ошибка при обновлении данных контрагента:", error);
+      console.log('Ошибка при обновлении данных контрагента:', error);
     }
   },
 };
