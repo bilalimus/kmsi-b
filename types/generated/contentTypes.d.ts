@@ -888,7 +888,8 @@ export interface ApiContragentContragent extends Schema.CollectionType {
         '\u043F\u0435\u0440\u0435\u043C\u0435\u0449\u0435\u043D',
         '\u043E\u0442\u0447\u0438\u0441\u043B\u0435\u043D'
       ]
-    >;
+    > &
+      Attribute.DefaultTo<'\u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u043D'>;
     gns: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1194,6 +1195,10 @@ export interface ApiServiceService extends Schema.CollectionType {
   };
   attributes: {
     title: Attribute.String;
+    value: Attribute.Integer;
+    date: Attribute.Date;
+    code: Attribute.String;
+    math_oper: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

@@ -14,6 +14,18 @@
   "attributes": {
     "title": {
       "type": "string"
+    },
+    "value": {
+      "type": "integer"
+    },
+    "date": {
+      "type": "date"
+    },
+    "code": {
+      "type": "string"
+    },
+    "math_oper": {
+      "type": "string"
     }
   }
 }
