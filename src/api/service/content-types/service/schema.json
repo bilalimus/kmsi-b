@@ -26,6 +26,9 @@
     },
     "math_oper": {
       "type": "string"
+    },
+    "measurement": {
+      "type": "string"
     }
   }
 }

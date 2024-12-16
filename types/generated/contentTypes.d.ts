@@ -1199,6 +1199,7 @@ export interface ApiServiceService extends Schema.CollectionType {
     date: Attribute.Date;
     code: Attribute.String;
     math_oper: Attribute.String;
+    measurement: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
