@@ -60,6 +60,15 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    },
+    "service": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::service.service"
     }
   }
 }

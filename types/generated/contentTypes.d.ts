@@ -1017,6 +1017,12 @@ export interface ApiOperationOperation extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
+    price: Attribute.Decimal & Attribute.Required;
+    service: Attribute.Relation<
+      'api::operation.operation',
+      'oneToOne',
+      'api::service.service'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
