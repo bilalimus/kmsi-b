@@ -1,6 +1,6 @@
 module.exports = {
   // Метод для создания записей (без изменений)
-  async operationForPayroll(ctx) {
+  async operationsForPayroll(ctx) {
     try {
       const { autorID, divisionID, subdiv_oneID, docDate, period } =
         ctx.request.body;
