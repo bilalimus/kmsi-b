@@ -32,7 +32,9 @@ module.exports = {
             if (splittedComment) {
               const [inn_spl, resident_spl] = splittedComment;
               inn = inn_spl;
-              resident = resident_spl;
+              if(resident_spl === 'KGZ'){
+                resident = "417";
+              }
             }
           }
 
