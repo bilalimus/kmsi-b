@@ -62,6 +62,7 @@ module.exports = {
         const startDate = new Date(periodFrom);
         const endDate = new Date(periodTo);
 
+        // Определяем пересечение периодов
         const effectiveStart = operationStartDate > startDate ? operationStartDate : startDate;
         const effectiveEnd = operationEndDate < endDate ? operationEndDate : endDate;
 
@@ -92,3 +93,4 @@ module.exports = {
     }
   },
 };
+
