@@ -68,42 +68,38 @@ module.exports = {
 
         if (effectiveStart <= effectiveEnd) {
           payrollEntries.push({
-            data: {
-              docDate,
-              periodFrom: effectiveStart.toISOString().split('T')[0],
-              periodTo: effectiveEnd.toISOString().split('T')[0],
-              amount: operation.price,
-              contragent: operation.contragent,
-              division: operation.division,
-              subdiv_one: operation.subdiv_one,
-              service: operation.service,
-              autor: autorID,
-              oper_type: operation.oper_type,
-            },
+            docDate,
+            periodFrom: effectiveStart.toISOString().split('T')[0],
+            periodTo: effectiveEnd.toISOString().split('T')[0],
+            amount: operation.price,
+            contragent: operation.contragent,
+            division: operation.division,
+            subdiv_one: operation.subdiv_one,
+            service: operation.service,
+            autor: autorID,
+            oper_type: operation.oper_type,
           });
         }
       }
 
       // Проверяем, чтобы покрыть весь указанный период до periodTo
       let lastCoveredDate = payrollEntries.reduce((latest, entry) => {
-        const entryEndDate = new Date(entry.data.periodTo);
+        const entryEndDate = new Date(entry.periodTo);
         return entryEndDate > latest ? entryEndDate : latest;
       }, new Date(periodFrom));
 
       if (lastCoveredDate < new Date(periodTo)) {
         payrollEntries.push({
-          data: {
-            docDate,
-            periodFrom: lastCoveredDate.toISOString().split('T')[0],
-            periodTo: periodTo,
-            amount: 0, // Сумму нужно определить по логике
-            contragent: null, // Контрагент отсутствует
-            division: null,
-            subdiv_one: null,
-            service: null,
-            autor: autorID,
-            oper_type: null,
-          },
+          docDate,
+          periodFrom: lastCoveredDate.toISOString().split('T')[0],
+          periodTo: periodTo,
+          amount: 0, // Сумму нужно определить по логике
+          contragent: null, // Контрагент отсутствует
+          division: null,
+          subdiv_one: null,
+          service: null,
+          autor: autorID,
+          oper_type: null,
         });
       }
 
