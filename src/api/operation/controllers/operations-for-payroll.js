@@ -30,7 +30,8 @@ module.exports = {
         filters.subdiv_one = { id: subdiv_oneID };
       }
 
-      filters.periodFrom = { $gte: periodFrom };
+      filters.periodFrom = { $lte: periodTo };
+      filters.periodTo = { $gte: periodFrom };
 
       const operations = await strapi.entityService.findMany(
         'api::operation.operation',
@@ -56,46 +57,29 @@ module.exports = {
       const payrollEntries = [];
 
       for (const operation of operations) {
+        const operationStartDate = new Date(operation.periodFrom);
+        const operationEndDate = new Date(operation.periodTo);
         const startDate = new Date(periodFrom);
-        const midDate = new Date(docDate);
         const endDate = new Date(periodTo);
 
-        if (operation.price && operation.price > 0) {
-          // Период с начала до даты документа
-          if (startDate < midDate) {
-            payrollEntries.push({
-              data: {
-                docDate,
-                periodFrom: periodFrom,
-                periodTo: midDate.toISOString().split('T')[0],
-                amount: operation.price, // Использование значения из operations.price
-                contragent: operation.contragent,
-                division: operation.division,
-                subdiv_one: operation.subdiv_one,
-                service: operation.service,
-                autor: autorID,
-                oper_type: operation.oper_type,
-              },
-            });
-          }
+        const effectiveStart = operationStartDate > startDate ? operationStartDate : startDate;
+        const effectiveEnd = operationEndDate < endDate ? operationEndDate : endDate;
 
-          // Период с даты документа до конца
-          if (midDate <= endDate) {
-            payrollEntries.push({
-              data: {
-                docDate,
-                periodFrom: midDate.toISOString().split('T')[0],
-                periodTo: periodTo,
-                amount: operation.price, // Использование значения из operations.price
-                contragent: operation.contragent,
-                division: operation.division,
-                subdiv_one: operation.subdiv_one,
-                service: operation.service,
-                autor: autorID,
-                oper_type: operation.oper_type,
-              },
-            });
-          }
+        if (effectiveStart <= effectiveEnd) {
+          payrollEntries.push({
+            data: {
+              docDate,
+              periodFrom: effectiveStart.toISOString().split('T')[0],
+              periodTo: effectiveEnd.toISOString().split('T')[0],
+              amount: operation.price,
+              contragent: operation.contragent,
+              division: operation.division,
+              subdiv_one: operation.subdiv_one,
+              service: operation.service,
+              autor: autorID,
+              oper_type: operation.oper_type,
+            },
+          });
         }
       }
 
