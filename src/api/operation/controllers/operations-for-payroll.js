@@ -7,29 +7,18 @@
 module.exports = {
   async operationsForPayroll(ctx) {
     try {
-      const { autorID, divisionID, subdiv_oneID, docDate, period } =
-        ctx.request.body;
+      const {
+        autorID,
+        divisionID,
+        subdiv_oneID,
+        docDate,
+        periodFrom,
+        periodTo,
+      } = ctx.request.body;
 
-      if (!docDate || !period || !autorID) {
+      if (!docDate || !periodFrom || !periodTo || !autorID) {
         return ctx.throw(400, 'Поля docDate, autorID, period обязательны.');
       }
-      const [year, month] = period.split('-');
-      const monthAndYear = new Date(year, month);
-
-      const periodFrom = new Date(
-        monthAndYear.getFullYear(),
-        monthAndYear.getMonth() - 1,
-        2
-      )
-        .toISOString()
-        .split('T')[0];
-      const periodTo = new Date(
-        monthAndYear.getFullYear(),
-        monthAndYear.getMonth(),
-        1
-      )
-        .toISOString()
-        .split('T')[0];
       const filters = {};
 
       if (divisionID && divisionID != 0) {
@@ -40,34 +29,41 @@ module.exports = {
         filters.subdiv_one = { id: subdiv_oneID };
       }
 
-      filters.periodFrom = { $lte: periodFrom };
-      filters.periodTo = { $gte: periodTo };
+      filters.periodFrom = { $gte: periodFrom };
+      // filters.periodTo = { $lte: periodTo };
 
-      const contragentWithType3 = await strapi.entityService.findMany(
-        'api::operation.operation',
-        {
-          filters: { oper_type: 3 },
-          populate: ['contragent'],
-        }
-      );
+      //      const contragentWithType3 = await strapi.entityService.findMany(
+      //        'api::operation.operation',
+      //        {
+      //          filters: { oper_type: 3 },
+      //          populate: ['contragent'],
+      //        }
+      //      );
 
-      const excludedContragentIds = contragentWithType3.map(
-        (operation) => operation.contragent.id
-      );
+      //      const excludedContragentIds = contragentWithType3.map(
+      //        (operation) => operation.contragent.id
+      //      );
 
-      filters.oper_type = { $in: [1, 2] };
-      if (excludedContragentIds.length > 0) {
-        filters.contragent = { id: { $notIn: excludedContragentIds } };
-      }
+      //      filters.oper_type = { $in: [1, 2] };
+      //      if (excludedContragentIds.length > 0) {
+      //        filters.contragent = { id: { $notIn: excludedContragentIds } };
+      //      }
 
       const operations = await strapi.entityService.findMany(
         'api::operation.operation',
         {
           filters,
-          populate: ['division', 'subdiv_one', 'contragent'],
+          populate: [
+            'division',
+            'subdiv_one',
+            'contragent',
+            'service',
+            'oper_type',
+          ],
         }
       );
-
+      console.log('Kol:', operations.length);
+      //console.log('operations:', operations);
       if (operations.length === 0) {
         return ctx.throw(
           404,
@@ -101,10 +97,12 @@ module.exports = {
             periodFrom,
             periodTo,
             amount: operation.price,
-            contragent: operation.contragent.id,
-            division: operation.division.id,
-            subdiv_one: operation.subdiv_one.id,
+            contragent: operation.contragent,
+            division: operation.division,
+            subdiv_one: operation.subdiv_one,
+            service: operation.service,
             autor: autorID,
+            oper_type: operation.oper_type,
           },
         };
         payrollEntries.push(payrollEntry);
