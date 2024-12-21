@@ -56,7 +56,8 @@ module.exports = {
 
       const payrollEntries = [];
 
-      for (const operation of operations) {
+      for (let i = 0; i < operations.length; i++) {
+        const operation = operations[i];
         const operationStartDate = new Date(operation.periodFrom);
         const operationEndDate = new Date(operation.periodTo);
         const startDate = new Date(periodFrom);
@@ -68,6 +69,7 @@ module.exports = {
 
         if (effectiveStart <= effectiveEnd) {
           payrollEntries.push({
+            id: i + 1,
             docDate,
             periodFrom: effectiveStart.toISOString().split('T')[0],
             periodTo: effectiveEnd.toISOString().split('T')[0],
@@ -90,6 +92,7 @@ module.exports = {
 
       if (lastCoveredDate < new Date(periodTo)) {
         payrollEntries.push({
+          id: payrollEntries.length + 1,
           docDate,
           periodFrom: lastCoveredDate.toISOString().split('T')[0],
           periodTo: periodTo,
