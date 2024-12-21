@@ -77,23 +77,23 @@ module.exports = {
 
       const payrollEntries = [];
       for (const operation of operations) {
-        const existingPayroll = await strapi.entityService.findMany(
-          'api::payroll.payroll',
-          {
-            filters: {
-              contragent: operation.contragent.id,
-              periodFrom,
-              periodTo,
-            },
-          }
-        );
+        // const existingPayroll = await strapi.entityService.findMany(
+        //   'api::payroll.payroll',
+        //   {
+        //     filters: {
+        //       contragent: operation.contragent.id,
+        //       periodFrom,
+        //       periodTo,
+        //     },
+        //   }
+        // );
 
-        if (existingPayroll.length > 0) {
-          return ctx.throw(
-            409,
-            `Запись для выбранных контрагентов за указанный период уже существует.`
-          );
-        }
+        // if (existingPayroll.length > 0) {
+        //   return ctx.throw(
+        //     409,
+        //     `Запись для выбранных контрагентов за указанный период уже существует.`
+        //   );
+        // }
 
         const payrollEntry = {
           data: {
@@ -111,7 +111,7 @@ module.exports = {
       }
 
       ctx.send({
-        message: `${payrollEntries.length} записей успешно создано.`,
+        message: `${payrollEntries.length} записей.`,
         data: payrollEntries,
       });
     } catch (err) {
