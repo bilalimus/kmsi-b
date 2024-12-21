@@ -68,7 +68,7 @@ module.exports = {
                 docDate,
                 periodFrom: periodFrom,
                 periodTo: midDate.toISOString().split('T')[0],
-                amount: 10000, // Условное значение для первой половины
+                amount: operation.price, // Использование значения из operations.price
                 contragent: operation.contragent,
                 division: operation.division,
                 subdiv_one: operation.subdiv_one,
@@ -86,7 +86,7 @@ module.exports = {
                 docDate,
                 periodFrom: midDate.toISOString().split('T')[0],
                 periodTo: periodTo,
-                amount: 5000, // Условное значение для второй половины
+                amount: operation.price, // Использование значения из operations.price
                 contragent: operation.contragent,
                 division: operation.division,
                 subdiv_one: operation.subdiv_one,
