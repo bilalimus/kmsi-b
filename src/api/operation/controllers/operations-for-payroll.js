@@ -68,7 +68,6 @@ module.exports = {
 
         if (effectiveStart <= effectiveEnd) {
           payrollEntries.push({
-            data: {
               docDate,
               periodFrom: effectiveStart.toISOString().split('T')[0],
               periodTo: effectiveEnd.toISOString().split('T')[0],
@@ -79,7 +78,6 @@ module.exports = {
               service: operation.service,
               autor: autorID,
               oper_type: operation.oper_type,
-            },
           });
         }
       }
@@ -92,7 +90,6 @@ module.exports = {
 
       if (lastCoveredDate < new Date(periodTo)) {
         payrollEntries.push({
-          data: {
             docDate,
             periodFrom: lastCoveredDate.toISOString().split('T')[0],
             periodTo: periodTo,
@@ -103,7 +100,6 @@ module.exports = {
             service: null,
             autor: autorID,
             oper_type: null,
-          },
         });
       }
 
