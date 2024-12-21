@@ -19,6 +19,7 @@ module.exports = {
       if (!docDate || !periodFrom || !periodTo || !autorID) {
         return ctx.throw(400, 'Поля docDate, autorID, period обязательны.');
       }
+
       const filters = {};
 
       if (divisionID && divisionID != 0) {
@@ -30,24 +31,6 @@ module.exports = {
       }
 
       filters.periodFrom = { $gte: periodFrom };
-      // filters.periodTo = { $lte: periodTo };
-
-      //      const contragentWithType3 = await strapi.entityService.findMany(
-      //        'api::operation.operation',
-      //        {
-      //          filters: { oper_type: 3 },
-      //          populate: ['contragent'],
-      //        }
-      //      );
-
-      //      const excludedContragentIds = contragentWithType3.map(
-      //        (operation) => operation.contragent.id
-      //      );
-
-      //      filters.oper_type = { $in: [1, 2] };
-      //      if (excludedContragentIds.length > 0) {
-      //        filters.contragent = { id: { $notIn: excludedContragentIds } };
-      //      }
 
       const operations = await strapi.entityService.findMany(
         'api::operation.operation',
@@ -62,8 +45,7 @@ module.exports = {
           ],
         }
       );
-      console.log('Kol:', operations.length);
-      //console.log('operations:', operations);
+
       if (operations.length === 0) {
         return ctx.throw(
           404,
@@ -72,40 +54,49 @@ module.exports = {
       }
 
       const payrollEntries = [];
+
       for (const operation of operations) {
-        // const existingPayroll = await strapi.entityService.findMany(
-        //   'api::payroll.payroll',
-        //   {
-        //     filters: {
-        //       contragent: operation.contragent.id,
-        //       periodFrom,
-        //       periodTo,
-        //     },
-        //   }
-        // );
+        const startDate = new Date(periodFrom);
+        const midDate = new Date(docDate);
+        const endDate = new Date(periodTo);
 
-        // if (existingPayroll.length > 0) {
-        //   return ctx.throw(
-        //     409,
-        //     `Запись для выбранных контрагентов за указанный период уже существует.`
-        //   );
-        // }
+        if (operation.price && operation.price > 0) {
+          // Период с начала до даты документа
+          if (startDate < midDate) {
+            payrollEntries.push({
+              data: {
+                docDate,
+                periodFrom: periodFrom,
+                periodTo: midDate.toISOString().split('T')[0],
+                amount: 10000, // Условное значение для первой половины
+                contragent: operation.contragent,
+                division: operation.division,
+                subdiv_one: operation.subdiv_one,
+                service: operation.service,
+                autor: autorID,
+                oper_type: operation.oper_type,
+              },
+            });
+          }
 
-        const payrollEntry = {
-          data: {
-            docDate,
-            periodFrom,
-            periodTo,
-            amount: operation.price,
-            contragent: operation.contragent,
-            division: operation.division,
-            subdiv_one: operation.subdiv_one,
-            service: operation.service,
-            autor: autorID,
-            oper_type: operation.oper_type,
-          },
-        };
-        payrollEntries.push(payrollEntry);
+          // Период с даты документа до конца
+          if (midDate <= endDate) {
+            payrollEntries.push({
+              data: {
+                docDate,
+                periodFrom: midDate.toISOString().split('T')[0],
+                periodTo: periodTo,
+                amount: 5000, // Условное значение для второй половины
+                contragent: operation.contragent,
+                division: operation.division,
+                subdiv_one: operation.subdiv_one,
+                service: operation.service,
+                autor: autorID,
+                oper_type: operation.oper_type,
+              },
+            });
+          }
+        }
       }
 
       ctx.send({
