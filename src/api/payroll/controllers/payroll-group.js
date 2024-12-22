@@ -47,12 +47,12 @@ module.exports = {
             data: {
               docDate: item.docDate,
               periodFrom: item.periodFrom,
-              periodTo: item.preriodTo,
+              periodTo: item.periodTo,
               amount: item.amount,
               contragent: item.contragent.id,
               division: item.division.id,
               subdiv_one: item.subdiv_one.id,
-              autor: item.autorID,
+              autor: item.autor,
             },
           }
         );
