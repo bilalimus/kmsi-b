@@ -84,13 +84,13 @@ module.exports = {
         }
       }
 
-      // Проверяем, чтобы покрыть весь указанный период до periodTo
+      // Проверяем, чтобы покрыть весь указанный период до periodTo, но не добавляем запись, если нет данных операций
       let lastCoveredDate = payrollEntries.reduce((latest, entry) => {
         const entryEndDate = new Date(entry.periodTo);
         return entryEndDate > latest ? entryEndDate : latest;
       }, new Date(periodFrom));
 
-      if (lastCoveredDate < new Date(periodTo)) {
+      if (lastCoveredDate < new Date(periodTo) && operations.length > 0) {
         payrollEntries.push({
           id: payrollEntries.length + 1,
           docDate,
