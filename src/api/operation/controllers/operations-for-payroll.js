@@ -84,28 +84,6 @@ module.exports = {
         }
       }
 
-      // Проверяем, чтобы покрыть весь указанный период до periodTo, но не добавляем запись, если нет данных операций
-      let lastCoveredDate = payrollEntries.reduce((latest, entry) => {
-        const entryEndDate = new Date(entry.periodTo);
-        return entryEndDate > latest ? entryEndDate : latest;
-      }, new Date(periodFrom));
-
-      if (lastCoveredDate < new Date(periodTo) && operations.length > 0) {
-        payrollEntries.push({
-          id: payrollEntries.length + 1,
-          docDate,
-          periodFrom: lastCoveredDate.toISOString().split('T')[0],
-          periodTo: periodTo,
-          amount: 0, // Сумму нужно определить по логике
-          contragent: null, // Контрагент отсутствует
-          division: null,
-          subdiv_one: null,
-          service: null,
-          autor: autorID,
-          oper_type: null,
-        });
-      }
-
       ctx.send({
         message: `${payrollEntries.length} записей.`,
         data: payrollEntries,
