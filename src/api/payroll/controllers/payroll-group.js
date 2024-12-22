@@ -124,8 +124,8 @@ module.exports = {
         filters.subdiv_one = { id: subdiv_oneID };
       }
 
-      filters.periodFrom = { $lte: periodFrom };
-      filters.periodTo = { $gte: periodTo };
+      filters.periodFrom = { $lte: periodTo };
+      filters.periodTo = { $gte: periodFrom };
 
       const payrollEntries = await strapi.entityService.findMany(
         'api::payroll.payroll',
