@@ -1,3 +1,5 @@
+const service = require("../../service/controllers/service");
+
 module.exports = {
   // Метод для создания записей (без изменений)
   async create(ctx) {
@@ -53,6 +55,7 @@ module.exports = {
               division: item.division.id,
               subdiv_one: item.subdiv_one.id,
               autor: item.autor,
+              service: item.service.id,
             },
           }
         );
