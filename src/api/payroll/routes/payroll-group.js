@@ -22,6 +22,15 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: "POST",
+      path: "/payroll-group/delete", // Новый маршрут для фильтрации
+      handler: "payroll-group.bulkDelete",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 };
 

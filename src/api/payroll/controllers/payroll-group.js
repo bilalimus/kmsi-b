@@ -1,4 +1,4 @@
-const service = require("../../service/controllers/service");
+
 
 module.exports = {
   // Метод для создания записей (без изменений)
@@ -153,8 +153,60 @@ module.exports = {
       ctx.throw(500, `Ошибка сервера: ${err.message}`);
     }
   },
-};
 
-function calculateAmount(contract) {
-  return contract / 12;
-}
+  // =============================================================================
+
+  async bulkDelete(ctx) {
+    try {
+      const { data } = ctx.request.body;
+
+      if (!Array.isArray(data) || data.length === 0) {
+        return ctx.throw(400, 'Данные для удаления не предоставлены или пусты.');
+      }
+
+      const failedToDelete = [];
+      const successfullyDeleted = [];
+
+      for (const item of data) {
+        try {
+          const existingPayroll = await strapi.entityService.findOne(
+            'api::payroll.payroll',
+            item.id
+          );
+
+          if (!existingPayroll) {
+            failedToDelete.push({
+              id: item.id,
+              reason: 'Запись не найдена.',
+            });
+            continue;
+          }
+
+          await strapi.entityService.delete('api::payroll.payroll', item.id);
+
+          successfullyDeleted.push({
+            id: item.id,
+            message: 'Запись успешно удалена.',
+          });
+        } catch (error) {
+          failedToDelete.push({
+            id: item.id,
+            reason: `Ошибка при удалении: ${error.message}`,
+          });
+        }
+      }
+
+      const result = {
+        message: `Удалено ${successfullyDeleted.length} записей, ${failedToDelete.length} не удалось удалить.`,
+        details: {
+          successfullyDeleted,
+          failedToDelete,
+        },
+      };
+
+      ctx.send(result);
+    } catch (error) {
+      ctx.throw(500, `Ошибка сервера: ${error.message}`);
+    }
+  },
+};
