@@ -4,45 +4,42 @@ module.exports = {
   // Метод для создания записей (без изменений)
   async create(ctx) {
     try {
-      const { data } =
-        ctx.request.body;
-      
-      // const operations = await strapi.entityService.findMany(
-      //   'api::operation.operation',
-      //   {
-      //     filters,
-      //     populate: ['division', 'subdiv_one', 'contragent'],
-      //   }
-      // );
-
-      // if (operations.length === 0) {
-      //   return ctx.throw(
-      //     404,
-      //     'Не найдено контрагентов для указанных критериев'
-      //   );
-      // }
-
+      const { data } = ctx.request.body;
+  
+      // Проверка всех записей на дублирование
+      const duplicateEntries = [];
+      for (const item of data) {
+        const existingPayroll = await strapi.entityService.findMany(
+          'api::payroll.payroll',
+          {
+            filters: {
+              docDate: item.docDate,
+              periodFrom: item.periodFrom,
+              periodTo: item.periodTo,
+              contragent: item.contragent.id,
+            },
+          }
+        );
+  
+        if (existingPayroll.length > 0) {
+          duplicateEntries.push(item);
+        }
+      }
+  
+      // Если есть дубли, отклоняем все записи
+      if (duplicateEntries.length > 0) {
+        return ctx.send(
+          {
+            message: 'Некоторые записи уже существуют. Все записи отклонены.',
+            duplicates: duplicateEntries,
+          },
+          409 // Код ошибки для конфликта
+        );
+      }
+  
+      // Если нет дублей, сохраняем все записи
       const payrollEntries = [];
       for (const item of data) {
-        console.log("ITEMMMM", item)
-        // const existingPayroll = await strapi.entityService.findMany(
-        //   'api::payroll.payroll',
-        //   {
-        //     filters: {
-        //       contragent: operation.contragent.id,
-        //       periodFrom,
-        //       periodTo,
-        //     },
-        //   }
-        // );
-
-        // if (existingPayroll.length > 0) {
-        //   return ctx.throw(
-        //     409,
-        //     `Запись для выбранных контрагентов за указанный период уже существует.`
-        //   );
-        // }
-
         const payrollEntry = await strapi.entityService.create(
           'api::payroll.payroll',
           {
@@ -59,7 +56,7 @@ module.exports = {
             },
           }
         );
-
+  
         const populatedPayrollEntry = await strapi.entityService.findOne(
           'api::payroll.payroll',
           payrollEntry.id,
@@ -75,10 +72,10 @@ module.exports = {
             },
           }
         );
-
+  
         payrollEntries.push(populatedPayrollEntry);
       }
-
+  
       ctx.send({
         message: `${payrollEntries.length} записей успешно создано.`,
         data: payrollEntries,
@@ -87,6 +84,7 @@ module.exports = {
       ctx.throw(500, `Ошибка сервера: ${err.message}`);
     }
   },
+  
 // =================================================================================
   async read(ctx) {
     try {
