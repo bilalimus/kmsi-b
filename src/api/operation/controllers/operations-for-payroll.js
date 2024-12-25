@@ -20,6 +20,16 @@ module.exports = {
         return ctx.throw(400, 'Поля docDate, autorID, period обязательны.');
       }
 
+      const autor = await strapi
+        .query('plugin::users-permissions.user')
+        .findOne({
+          where: { id: autorID },
+        });
+
+      if (!autor) {
+        return ctx.throw(404, `Пользователь с ID ${autorID} не найден.`);
+      }
+
       const filters = {};
 
       if (divisionID && divisionID != 0) {
@@ -64,8 +74,10 @@ module.exports = {
         const endDate = new Date(periodTo);
 
         // Определяем пересечение периодов
-        const effectiveStart = operationStartDate > startDate ? operationStartDate : startDate;
-        const effectiveEnd = operationEndDate < endDate ? operationEndDate : endDate;
+        const effectiveStart =
+          operationStartDate > startDate ? operationStartDate : startDate;
+        const effectiveEnd =
+          operationEndDate < endDate ? operationEndDate : endDate;
 
         if (effectiveStart <= effectiveEnd) {
           payrollEntries.push({
@@ -78,7 +90,7 @@ module.exports = {
             division: operation.division,
             subdiv_one: operation.subdiv_one,
             service: operation.service,
-            autor: autorID,
+            autor: autor,
             oper_type: operation.oper_type,
           });
         }
