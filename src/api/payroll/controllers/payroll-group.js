@@ -1,11 +1,9 @@
-
-
 module.exports = {
   // Метод для создания записей (без изменений)
   async create(ctx) {
     try {
       const { data } = ctx.request.body;
-  
+
       // Проверка всех записей на дублирование
       const duplicateEntries = [];
       for (const item of data) {
@@ -13,19 +11,18 @@ module.exports = {
           'api::payroll.payroll',
           {
             filters: {
-              docDate: item.docDate,
               periodFrom: item.periodFrom,
               periodTo: item.periodTo,
               contragent: item.contragent.id,
             },
           }
         );
-  
+
         if (existingPayroll.length > 0) {
           duplicateEntries.push(item);
         }
       }
-  
+
       // Если есть дубли, отклоняем все записи
       if (duplicateEntries.length > 0) {
         return ctx.send(
@@ -36,7 +33,7 @@ module.exports = {
           409 // Код ошибки для конфликта
         );
       }
-  
+
       // Если нет дублей, сохраняем все записи
       const payrollEntries = [];
       for (const item of data) {
@@ -56,7 +53,7 @@ module.exports = {
             },
           }
         );
-  
+
         const populatedPayrollEntry = await strapi.entityService.findOne(
           'api::payroll.payroll',
           payrollEntry.id,
@@ -72,10 +69,10 @@ module.exports = {
             },
           }
         );
-  
+
         payrollEntries.push(populatedPayrollEntry);
       }
-  
+
       ctx.send({
         message: `${payrollEntries.length} записей успешно создано.`,
         data: payrollEntries,
@@ -84,8 +81,8 @@ module.exports = {
       ctx.throw(500, `Ошибка сервера: ${err.message}`);
     }
   },
-  
-// =================================================================================
+
+  // =================================================================================
   async read(ctx) {
     try {
       const { divisionID, subdiv_oneID, period } = ctx.request.body;
@@ -161,7 +158,10 @@ module.exports = {
       const { data } = ctx.request.body;
 
       if (!Array.isArray(data) || data.length === 0) {
-        return ctx.throw(400, 'Данные для удаления не предоставлены или пусты.');
+        return ctx.throw(
+          400,
+          'Данные для удаления не предоставлены или пусты.'
+        );
       }
 
       const failedToDelete = [];
