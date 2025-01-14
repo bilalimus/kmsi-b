@@ -110,9 +110,7 @@ module.exports = {
   async operationsForPayrollOne(ctx) {
     try {
       const { contragentID, periodFrom, periodTo } = ctx.request.body;
-      console.log('contragentID', contragentID);
-      console.log('periodFrom', periodFrom);
-      console.log('periodTo', periodTo);
+
       if (!periodFrom || !periodTo || !contragentID) {
         return ctx.throw(
           400,
@@ -122,7 +120,7 @@ module.exports = {
 
       const filters = {};
 
-      filters.division = { id: contragentID };
+      filters.contragent = { id: contragentID };
 
       filters.periodFrom = { $lte: periodTo };
       filters.periodTo = { $gte: periodFrom };
