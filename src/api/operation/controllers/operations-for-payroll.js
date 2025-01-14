@@ -110,9 +110,14 @@ module.exports = {
   async operationsForPayrollOne(ctx) {
     try {
       const { contragentID, periodFrom, periodTo } = ctx.request.body;
-
-      if (!periodFrom || !periodTo || contragentID) {
-        return ctx.throw(400, 'Поля docDate, autorID, period обязательны.');
+      console.log('contragentID', contragentID);
+      console.log('periodFrom', periodFrom);
+      console.log('periodTo', periodTo);
+      if (!periodFrom || !periodTo || !contragentID) {
+        return ctx.throw(
+          400,
+          'Поля contragentID, periodFrom, periodTo обязательны.'
+        );
       }
 
       const filters = {};
