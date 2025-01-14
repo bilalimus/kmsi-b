@@ -13,5 +13,14 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: 'POST',
+      path: '/operations-for-payroll/one',
+      handler: 'operations-for-payroll.operationsForPayrollOne',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 };
