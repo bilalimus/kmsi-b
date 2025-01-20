@@ -14,7 +14,17 @@ module.exports = {
         }
       );
 
-      const { contragent, division, subdiv_one } = operation;
+      const { contragent, periodFrom, division, subdiv_one } = operation;
+
+      const allOperationsOfContragent = await strapi.entityService.findMany(
+        'api::operation.operation',
+        contragent.id,
+        {
+          populate: ['contragent', 'oper_type']
+        }
+      )
+
+      console.log("AllOperations", allOperationsOfContragent)
 
       if (contragent && contragent.id) {
         await strapi.entityService.update(
