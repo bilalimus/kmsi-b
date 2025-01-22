@@ -122,11 +122,50 @@ module.exports = {
         'api::operation.operation',
         operationID,
         {
-          populate: ['contragent', 'division', 'subdiv_one'],
+          populate: ['contragent', 'division', 'subdiv_one', 'oper_type'],
         }
       );
 
-      const { contragent, division, subdiv_one } = operation;
+      const { contragent, periodFrom, division, subdiv_one } = operation;
+
+      const lastOperationOfContragent = await strapi.entityService.findMany(
+        'api::operation.operation',
+        {
+          filters: {
+            contragent: contragent.id,
+            id: { $lt: operationID },
+          },
+          sort: { id: 'desc' },
+          limit: 1,
+          populate: ['contragent', 'oper_type'],
+        }
+      );
+
+      if (lastOperationOfContragent.length > 0) {
+        const lastOperation = lastOperationOfContragent[0];
+
+        if (periodFrom) {
+          const periodFromDate = new Date(periodFrom);
+          periodFromDate.setDate(periodFromDate.getDate() - 1); // Вычитаем 1 день
+          const newPeriodTo = periodFromDate.toISOString().split('T')[0]; // Преобразуем в формат YYYY-MM-DD
+
+          await strapi.entityService.update(
+            'api::operation.operation',
+            lastOperation.id,
+            {
+              data: {
+                periodTo: newPeriodTo,
+              },
+            }
+          );
+
+          console.log(`Дата periodTo последней операции обновлена до ${newPeriodTo}.`);
+        } else {
+          console.log('Дата periodFrom текущей операции не задана.');
+        }
+      } else {
+        console.log('Предыдущая операция для данного контрагента не найдена.');
+      }
 
       if (contragent && contragent.id) {
         await strapi.entityService.update(
