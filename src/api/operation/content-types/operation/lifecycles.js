@@ -16,7 +16,7 @@ module.exports = {
 
       const { contragent, periodFrom, division, subdiv_one } = operation;
 
-      const allOperationsOfContragent = await strapi.entityService.findMany(
+      const lastOperationOfContragent = await strapi.entityService.findMany(
         'api::operation.operation',
         {
           filters: {
@@ -28,7 +28,7 @@ module.exports = {
         }
       )
 
-      console.log("AllOperations", allOperationsOfContragent)
+      console.log("AllOperations", lastOperationOfContragent)
 
       if (contragent && contragent.id) {
         await strapi.entityService.update(
