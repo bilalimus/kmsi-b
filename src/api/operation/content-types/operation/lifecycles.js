@@ -21,11 +21,11 @@ module.exports = {
         {
           filters: {
             contragent: contragent.id,
-          }
-        },
-        {
+          },
+          sort: {id: 'desc'},
+          limit: 1,
           populate: ['contragent', 'oper_type']
-        }
+        },
       )
 
       console.log("AllOperations", lastOperationOfContragent)
