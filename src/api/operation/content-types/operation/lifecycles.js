@@ -1,5 +1,7 @@
 'use strict';
 
+const moment = require('moment'); // Подключение moment.js для работы с датами
+
 module.exports = {
   async afterCreate(event) {
     const { result } = event;
@@ -21,15 +23,37 @@ module.exports = {
         {
           filters: {
             contragent: contragent.id,
-            id: {$lt: operationID}
+            id: { $lt: operationID },
           },
-          sort: {id: 'desc'},
+          sort: { id: 'desc' },
           limit: 1,
-          populate: ['contragent', 'oper_type']
-        },
-      )
+          populate: ['contragent', 'oper_type'],
+        }
+      );
 
-      console.log("AllOperations", lastOperationOfContragent)
+      if (lastOperationOfContragent.length > 0) {
+        const lastOperation = lastOperationOfContragent[0];
+
+        if (periodFrom) {
+          const newPeriodTo = moment(periodFrom).subtract(1, 'day').format('YYYY-MM-DD');
+
+          await strapi.entityService.update(
+            'api::operation.operation',
+            lastOperation.id,
+            {
+              data: {
+                periodTo: newPeriodTo,
+              },
+            }
+          );
+
+          console.log(`Дата periodTo последней операции обновлена до ${newPeriodTo}.`);
+        } else {
+          console.log('Дата periodFrom текущей операции не задана.');
+        }
+      } else {
+        console.log('Предыдущая операция для данного контрагента не найдена.');
+      }
 
       if (contragent && contragent.id) {
         await strapi.entityService.update(
@@ -46,6 +70,7 @@ module.exports = {
       } else {
         console.log('Контрагент не указан для этой операции.');
       }
+
       switch (operation.oper_type.id) {
         case 1:
           await strapi.entityService.update(
