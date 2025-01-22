@@ -21,6 +21,7 @@ module.exports = {
         {
           filters: {
             contragent: contragent.id,
+            id: {$lt: operationID}
           },
           sort: {id: 'desc'},
           limit: 1,
