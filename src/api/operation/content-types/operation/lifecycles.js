@@ -1,7 +1,5 @@
 'use strict';
 
-const moment = require('moment'); // Подключение moment.js для работы с датами
-
 module.exports = {
   async afterCreate(event) {
     const { result } = event;
@@ -35,7 +33,9 @@ module.exports = {
         const lastOperation = lastOperationOfContragent[0];
 
         if (periodFrom) {
-          const newPeriodTo = moment(periodFrom).subtract(1, 'day').format('YYYY-MM-DD');
+          const periodFromDate = new Date(periodFrom);
+          periodFromDate.setDate(periodFromDate.getDate() - 1); // Вычитаем 1 день
+          const newPeriodTo = periodFromDate.toISOString().split('T')[0]; // Преобразуем в формат YYYY-MM-DD
 
           await strapi.entityService.update(
             'api::operation.operation',
