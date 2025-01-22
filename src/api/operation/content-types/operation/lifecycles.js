@@ -18,7 +18,11 @@ module.exports = {
 
       const allOperationsOfContragent = await strapi.entityService.findMany(
         'api::operation.operation',
-        contragent.id,
+        {
+          filters: {
+            contragent: contragent.id,
+          }
+        }
         {
           populate: ['contragent', 'oper_type']
         }
