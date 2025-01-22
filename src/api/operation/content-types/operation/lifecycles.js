@@ -22,7 +22,7 @@ module.exports = {
           filters: {
             contragent: contragent.id,
           }
-        }
+        },
         {
           populate: ['contragent', 'oper_type']
         }
