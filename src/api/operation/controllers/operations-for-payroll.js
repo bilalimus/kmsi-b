@@ -90,7 +90,11 @@ module.exports = {
             division: operation.division,
             subdiv_one: operation.subdiv_one,
             service: operation.service,
-            autor: autor,
+            autor: {
+              id: autor.id,
+              username: autor.username,
+              usersurname: autor.usersurname,
+            },
             oper_type: operation.oper_type,
           });
         }
