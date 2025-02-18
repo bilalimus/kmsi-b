@@ -988,7 +988,7 @@ export interface ApiOperationOperation extends Schema.CollectionType {
   attributes: {
     docDate: Attribute.Date;
     contract: Attribute.Decimal & Attribute.Required;
-    docNumber: Attribute.BigInteger & Attribute.Required & Attribute.Unique;
+    docNumber: Attribute.BigInteger & Attribute.Required;
     periodFrom: Attribute.Date & Attribute.Required;
     periodTo: Attribute.Date & Attribute.Required;
     basedOn: Attribute.String;

@@ -22,7 +22,7 @@
     "docNumber": {
       "type": "biginteger",
       "required": true,
-      "unique": true
+      "unique": false
     },
     "periodFrom": {
       "type": "date",
